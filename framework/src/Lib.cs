@@ -1,0 +1,16 @@
+using System;
+using System.Runtime.InteropServices;
+
+
+namespace NTF
+{
+    public static partial class Lib
+    {
+
+        [LibraryImport("newtoast-core", EntryPoint = "test_internal_call")]
+        public static partial int TestInternalCall(int x);
+
+        [LibraryImport("newtoast-core", EntryPoint = "test_internal_ptr_return_call")]
+        public static partial IntPtr TestInternalPtrReturnCall();
+    }
+}
