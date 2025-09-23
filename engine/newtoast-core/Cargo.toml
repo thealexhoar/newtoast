@@ -1,0 +1,11 @@
+[package]
+name = "newtoast_core"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "newtoast_core"
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+libloading =  { version = "0.8.9" }

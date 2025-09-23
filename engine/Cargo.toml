@@ -1,12 +1,6 @@
-[package]
-name = "newtoast-engine"
-version = "0.1.0"
-edition = "2021"
 
-
-[lib]
-crate-type = ["cdylib"]
-
-
-[dependencies]
-libloading =  { version = "0.8.9" }
+[workspace]
+members = [
+    "newtoast-core",
+    "newtoast-bin",
+]

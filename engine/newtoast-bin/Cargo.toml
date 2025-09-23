@@ -1,0 +1,9 @@
+[package]
+name = "newtoast"
+version = "0.1.0"
+edition = "2021"
+
+
+
+[dependencies]
+newtoast_core = { version = "0.1.0", path = "../newtoast-core" }

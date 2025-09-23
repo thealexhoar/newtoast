@@ -19,7 +19,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "newtoast-engine"
+name = "newtoast"
+version = "0.1.0"
+dependencies = [
+ "newtoast_core",
+]
+
+[[package]]
+name = "newtoast_core"
 version = "0.1.0"
 dependencies = [
  "libloading",

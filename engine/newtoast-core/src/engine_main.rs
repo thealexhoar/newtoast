@@ -1,12 +1,8 @@
-#![allow(non_camel_case_types)]
+use crate::dotnet;
 
-mod dotnet;
-mod ffi_char_t;
 
-mod lib;
-
-fn main() {
-    println!("PWD:\n  {}", std::env::current_dir().unwrap().display());
+pub fn engine_main() {
+    println!("PWD 2:\n  {}", std::env::current_dir().unwrap().display());
 
     let hostfxr_lib = dotnet::load_hostfxr();
     let mut dotnet = dotnet::create_context(&hostfxr_lib, "runtimeconfig.json");

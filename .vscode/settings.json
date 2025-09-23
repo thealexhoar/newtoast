@@ -1,5 +1,8 @@
 {
     "rust-analyzer.linkedProjects": [
         "engine/Cargo.toml"
-    ]
+    ],
+    "rust-analyzer.cargo.extraEnv": {
+        "NETHOST_LIB_PATH": "C:/users/theal/Projects/newtoast/deps/lib"
+    }
 }

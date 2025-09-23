@@ -142,8 +142,10 @@ pub fn load_hostfxr() -> Library {
         println!("get_hostfxr_path rc: {}", rc);
         assert_eq!(rc, 0);
         println!("buffer size: {}", buffer_size);
-        let path=  String::from_utf16(&buffer).unwrap();
+        let mut path=  String::from_utf16(&buffer).unwrap();
+        path.truncate(buffer_size);
         println!("hostfxr path:\n  {}", path);
+
         let lib = libloading::Library::new(&path).unwrap();
 
         lib

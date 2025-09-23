@@ -13,8 +13,6 @@ namespace NTF
     public static class Test
     {
 
-        static IntPtr fetched;
-
         public static int Foo()
         {
             return 12345;

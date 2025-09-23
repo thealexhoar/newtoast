@@ -9,7 +9,7 @@ fn main() {
             // Tell cargo to tell rustc to link the library at LIB_PATH
             println!("cargo:rustc-link-search=native={}", nethost_path);
             // If you know the library name, e.g., "foo", uncomment and set below:
-            println!("cargo:rustc-link-lib=static=nethost");
+            println!("cargo:rustc-link-lib=dylib=nethost");
             println!("cargo:rerun-if-changed={}", nethost_path);
         },
         Err(_) => {
