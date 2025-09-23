@@ -1,58 +1,44 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
 
-#ifndef HAVE_HOSTFXR_H
-#define HAVE_HOSTFXR_H
+use std::os::raw::{c_int, c_void};
 
-#include <stddef.h>
-#include <stdint.h>
+#[cfg(windows)]
+pub type char_t = u16;
+#[cfg(not(windows))]
+pub type char_t = u8;
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif // __cplusplus
+pub enum HostfxrDelegate {
+	ComActivation = 0,
+	LoadInMemoryAssembly,
+	WinrtActivation,
+	ComRegistar,
+	ComUnregister,
+    LoadAssemblyAndGetFunctionPointer,
+    GetFunctionPointer,
+    LoadAssembly,
+    LoadAssemblyBytes,
+}
 
-#if defined(_WIN32)
-    #define HOSTFXR_CALLTYPE __cdecl
-    #ifdef _WCHAR_T_DEFINED
-        typedef wchar_t char_t;
-    #else
-        typedef unsigned short char_t;
-    #endif
-#else
-    #define HOSTFXR_CALLTYPE
-    typedef char char_t;
-#endif
 
-enum hostfxr_delegate_type
-{
-    hdt_com_activation,
-    hdt_load_in_memory_assembly,
-    hdt_winrt_activation,
-    hdt_com_register,
-    hdt_com_unregister,
-    hdt_load_assembly_and_get_function_pointer,
-    hdt_get_function_pointer,
-    hdt_load_assembly,
-    hdt_load_assembly_bytes,
-};
+pub type hostfxr_main_fn = unsafe extern "C" fn(argc: c_int, argv: *const *const char_t) -> c_int;
 
-typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_main_fn)(const int argc, const char_t **argv);
-typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_main_startupinfo_fn)(
-    const int argc,
-    const char_t **argv,
-    const char_t *host_path,
-    const char_t *dotnet_root,
-    const char_t *app_path);
-typedef int32_t(HOSTFXR_CALLTYPE* hostfxr_main_bundle_startupinfo_fn)(
-    const int argc,
-    const char_t** argv,
-    const char_t* host_path,
-    const char_t* dotnet_root,
-    const char_t* app_path,
-    int64_t bundle_header_offset);
+pub type hostfxr_main_startupinfo_fn = unsafe extern "C" fn(
+	argc: c_int,
+	argv: *const *const char_t,
+	host_path: *const char_t,
+	dotnet_root: *const char_t,
+	app_path: *const char_t,
+) -> c_int;
 
-typedef void(HOSTFXR_CALLTYPE *hostfxr_error_writer_fn)(const char_t *message);
+pub type hostfxr_main_bundle_startupinfo_fn = unsafe extern "C" fn(
+	argc: c_int,
+	argv: *const *const char_t,
+	host_path: *const char_t,
+	dotnet_root: *const char_t,
+	app_path: *const char_t,
+	bundle_header_offset: i64,
+) -> c_int;
+
+pub type hostfxr_error_writer_fn = unsafe extern "C" fn(message: *const char_t);
 
 //
 // Sets a callback which is to be used to write errors to.
@@ -77,15 +63,16 @@ typedef void(HOSTFXR_CALLTYPE *hostfxr_error_writer_fn)(const char_t *message);
 // will be propagated to hostpolicy for the duration of the call. This means that errors from
 // both hostfxr and hostpolicy will be reporter through the same error writer.
 //
-typedef hostfxr_error_writer_fn(HOSTFXR_CALLTYPE *hostfxr_set_error_writer_fn)(hostfxr_error_writer_fn error_writer);
+pub type hostfxr_set_error_writer_fn = unsafe extern "C" fn(error_writer: hostfxr_error_writer_fn) -> hostfxr_error_writer_fn;
 
-typedef void* hostfxr_handle;
-struct hostfxr_initialize_parameters
-{
-    size_t size;
-    const char_t *host_path;
-    const char_t *dotnet_root;
-};
+pub type hostfxr_handle = *mut c_void;
+
+#[repr(C)]
+pub struct HostfxrInitParameters {
+	pub size: usize,
+	pub host_path: *const char_t,
+	pub dotnet_root: *const char_t,
+}
 
 //
 // Initializes the hosting components for a dotnet command line running an application
@@ -114,11 +101,12 @@ struct hostfxr_initialize_parameters
 //
 // This function does not load the runtime.
 //
-typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_initialize_for_dotnet_command_line_fn)(
-    int argc,
-    const char_t **argv,
-    const struct hostfxr_initialize_parameters *parameters,
-    /*out*/ hostfxr_handle *host_context_handle);
+pub type hostfxr_initialize_for_dotnet_command_line_fn = unsafe extern "C" fn(
+	argc: c_int,
+	argv: *const *const char_t,
+	parameters: *const HostfxrInitParameters,
+	host_context_handle: *mut hostfxr_handle,
+) -> c_int;
 
 //
 // Initializes the hosting components using a .runtimeconfig.json file
@@ -150,10 +138,11 @@ typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_initialize_for_dotnet_command_line_fn)
 // initializations. In the case of Success_DifferentRuntimeProperties, it is left to the consumer to verify that
 // the difference in properties is acceptable.
 //
-typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_initialize_for_runtime_config_fn)(
-    const char_t *runtime_config_path,
-    const struct hostfxr_initialize_parameters *parameters,
-    /*out*/ hostfxr_handle *host_context_handle);
+pub type hostfxr_initialize_for_runtime_config_fn = unsafe extern "C" fn(
+	runtime_config_path: *const char_t,
+	parameters: *const HostfxrInitParameters,
+	host_context_handle: *mut hostfxr_handle,
+) -> c_int;
 
 //
 // Gets the runtime property value for an initialized host context
@@ -178,10 +167,11 @@ typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_initialize_for_runtime_config_fn)(
 // If host_context_handle is nullptr and an active host context exists, this function will get the
 // property value for the active host context.
 //
-typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_get_runtime_property_value_fn)(
-    const hostfxr_handle host_context_handle,
-    const char_t *name,
-    /*out*/ const char_t **value);
+pub type hostfxr_get_runtime_property_value_fn = unsafe extern "C" fn(
+	host_context_handle: hostfxr_handle,
+	name: *const char_t,
+	value: *mut *const char_t,
+) -> c_int;
 
 //
 // Sets the value of a runtime property for an initialized host context
@@ -202,10 +192,11 @@ typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_get_runtime_property_value_fn)(
 // If the property already exists in the host context, it will be overwritten. If value is nullptr, the
 // property will be removed.
 //
-typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_set_runtime_property_value_fn)(
-    const hostfxr_handle host_context_handle,
-    const char_t *name,
-    const char_t *value);
+pub type hostfxr_set_runtime_property_value_fn = unsafe extern "C" fn(
+	host_context_handle: hostfxr_handle,
+	name: *const char_t,
+	value: *const char_t,
+) -> c_int;
 
 //
 // Gets all the runtime properties for an initialized host context
@@ -234,11 +225,12 @@ typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_set_runtime_property_value_fn)(
 // If host_context_handle is nullptr and an active host context exists, this function will get the
 // properties for the active host context.
 //
-typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_get_runtime_properties_fn)(
-    const hostfxr_handle host_context_handle,
-    /*inout*/ size_t * count,
-    /*out*/ const char_t **keys,
-    /*out*/ const char_t **values);
+pub type hostfxr_get_runtime_properties_fn = unsafe extern "C" fn(
+	host_context_handle: hostfxr_handle,
+	count: *mut usize, // inout
+	keys: *mut *const char_t, // out
+	values: *mut *const char_t, // out
+) -> c_int;
 
 //
 // Load CoreCLR and run the application for an initialized host context
@@ -254,7 +246,7 @@ typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_get_runtime_properties_fn)(
 //
 // This function will not return until the managed application exits.
 //
-typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_run_app_fn)(const hostfxr_handle host_context_handle);
+pub type hostfxr_run_app_fn = unsafe extern "C" fn(host_context_handle: hostfxr_handle) -> c_int;
 
 //
 // Gets a typed delegate from the currently loaded CoreCLR or from a newly created one.
@@ -277,10 +269,11 @@ typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_run_app_fn)(const hostfxr_handle host_
 //     hdt_load_assembly_and_get_function_pointer
 //     hdt_get_function_pointer
 //
-typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_get_runtime_delegate_fn)(
-    const hostfxr_handle host_context_handle,
-    enum hostfxr_delegate_type type,
-    /*out*/ void **delegate);
+pub type hostfxr_get_runtime_delegate_fn = unsafe extern "C" fn(
+	host_context_handle: hostfxr_handle,
+	cs_type: c_int,
+	delegate: *mut *mut c_void, //out
+) -> c_int;
 
 //
 // Closes an initialized host context
@@ -292,40 +285,38 @@ typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_get_runtime_delegate_fn)(
 // Return value:
 //     The error code result.
 //
-typedef int32_t(HOSTFXR_CALLTYPE *hostfxr_close_fn)(const hostfxr_handle host_context_handle);
+pub type hostfxr_close_fn = unsafe extern "C" fn(host_context_handle: hostfxr_handle) -> c_int;
 
-struct hostfxr_dotnet_environment_sdk_info
-{
-    size_t size;
-    const char_t* version;
-    const char_t* path;
-};
+#[repr(C)]
+pub struct HostfxrDotnetEnvironmentSdkInfo {
+	pub size: usize,
+	pub version: *const char_t,
+	pub path: *const char_t,
+}
 
-struct hostfxr_dotnet_environment_framework_info
-{
-    size_t size;
-    const char_t* name;
-    const char_t* version;
-    const char_t* path;
-};
+#[repr(C)]
+pub struct HostfxrDotnetEnvironmentFrameworkInfo {
+	pub size: usize,
+	pub name: *const char_t,
+	pub version: *const char_t,
+	pub path: *const char_t,
+}
 
-struct hostfxr_dotnet_environment_info
-{
-    size_t size;
+#[repr(C)]
+pub struct HostfxrDotnetEnvironmentInfo {
+	pub size: usize,
+	pub hostfxr_version: *const char_t,
+	pub hostfxr_commit_hash: *const char_t,
+	pub sdk_count: usize,
+	pub sdks: *const HostfxrDotnetEnvironmentSdkInfo,
+	pub framework_count: usize,
+	pub frameworks: *const HostfxrDotnetEnvironmentFrameworkInfo,
+}
 
-    const char_t* hostfxr_version;
-    const char_t* hostfxr_commit_hash;
-
-    size_t sdk_count;
-    const struct hostfxr_dotnet_environment_sdk_info* sdks;
-
-    size_t framework_count;
-    const struct hostfxr_dotnet_environment_framework_info* frameworks;
-};
-
-typedef void(HOSTFXR_CALLTYPE* hostfxr_get_dotnet_environment_info_result_fn)(
-    const struct hostfxr_dotnet_environment_info* info,
-    void* result_context);
+pub type hostfxr_get_dotnet_environment_info_result_fn = unsafe extern "C" fn(
+	info: *const HostfxrDotnetEnvironmentInfo,
+	result_context: *mut c_void,
+);
 
 //
 // Returns available SDKs and frameworks.
@@ -362,35 +353,35 @@ typedef void(HOSTFXR_CALLTYPE* hostfxr_get_dotnet_environment_info_result_fn)(
 //   Windows     - UTF-16 (pal::char_t is 2 byte wchar_t)
 //   Non-Windows - UTF-8  (pal::char_t is 1 byte char)
 //
-typedef int32_t(HOSTFXR_CALLTYPE* hostfxr_get_dotnet_environment_info_fn)(
-    const char_t* dotnet_root,
-    void* reserved,
-    hostfxr_get_dotnet_environment_info_result_fn result,
-    void* result_context);
+pub type hostfxr_get_dotnet_environment_info_fn = unsafe extern "C" fn(
+	dotnet_root: *const char_t,
+	reserved: *mut c_void,
+	result: hostfxr_get_dotnet_environment_info_result_fn,
+	result_context: *mut c_void,
+) -> c_int;
 
-struct hostfxr_framework_result
-{
-    size_t size;
-    const char_t* name;
-    const char_t* requested_version;
-    const char_t* resolved_version;
-    const char_t* resolved_path;
-};
+#[repr(C)]
+pub struct HostfxrFrameworkResult {
+	pub size: usize,
+	pub name: *const char_t,
+	pub requested_version: *const char_t,
+	pub resolved_version: *const char_t,
+	pub resolved_path: *const char_t,
+}
 
-struct hostfxr_resolve_frameworks_result
-{
-    size_t size;
+#[repr(C)]
+pub struct HostfxrResolveFrameworksResult {
+	pub size: usize,
+	pub resolved_count: usize,
+	pub resolved_frameworks: *const HostfxrFrameworkResult,
+	pub unresolved_count: usize,
+	pub unresolved_frameworks: *const HostfxrFrameworkResult,
+}
 
-    size_t resolved_count;
-    const struct hostfxr_framework_result* resolved_frameworks;
-
-    size_t unresolved_count;
-    const struct hostfxr_framework_result* unresolved_frameworks;
-};
-
-typedef void (HOSTFXR_CALLTYPE* hostfxr_resolve_frameworks_result_fn)(
-    const struct hostfxr_resolve_frameworks_result* result,
-    void* result_context);
+pub type hostfxr_resolve_frameworks_result_fn = unsafe extern "C" fn(
+	result: *const HostfxrResolveFrameworksResult,
+	result_context: *mut c_void,
+) -> ();
 
 //
 // Resolves frameworks for a runtime config
@@ -414,14 +405,52 @@ typedef void (HOSTFXR_CALLTYPE* hostfxr_resolve_frameworks_result_fn)(
 //   Windows     - UTF-16 (pal::char_t is 2-byte wchar_t)
 //   Non-Windows - UTF-8  (pal::char_t is 1-byte char)
 //
-typedef int32_t(HOSTFXR_CALLTYPE* hostfxr_resolve_frameworks_for_runtime_config_fn)(
-    const char_t* runtime_config_path,
-    /*opt*/ const struct hostfxr_initialize_parameters* parameters,
-    /*opt*/ hostfxr_resolve_frameworks_result_fn callback,
-    /*opt*/ void* result_context);
+pub type hostfxr_resolve_frameworks_for_runtime_config_fn = unsafe extern "C" fn(
+	runtime_config_path: *const char_t,
+	parameters: *const HostfxrInitParameters, //optional
+	callback: hostfxr_resolve_frameworks_result_fn, //optional
+	result_context: *mut c_void, //optional
+) -> c_int;
 
-#ifdef __cplusplus
-}
-#endif // __cplusplus
+// Signature of delegate returned by coreclr_delegate_type::load_assembly_and_get_function_pointer
+pub type load_assembly_and_get_function_pointer_fn = unsafe extern "C" fn(
+	assembly_path: *const char_t,      // Fully qualified path to assembly
+	type_name: *const char_t,          // Assembly qualified type name
+	method_name: *const char_t,        // Public static method name compatible with delegateType
+	delegate_type: *const char_t,      // Assembly qualified delegate type name or null
+									   // or UNMANAGEDCALLERSONLY_METHOD if the method is marked with
+									   // the UnmanagedCallersOnlyAttribute.
+	reserved: *const std::ffi::c_void, // Extensibility parameter (currently unused and must be 0)
+	delegate: *mut *mut std::ffi::c_void, // Pointer where to store the function pointer result
+) -> i32;
 
-#endif // HAVE_HOSTFXR_H
+// Signature of delegate returned by load_assembly_and_get_function_pointer_fn when delegate_type_name == null (default)
+pub type component_entry_point_fn = unsafe extern "C" fn(
+	arg: *const std::ffi::c_void, // Argument to the entry point
+) -> i32;
+
+pub type get_function_pointer_fn = unsafe extern "C" fn(
+	type_name: *const char_t,          // Assembly qualified type name
+	method_name: *const char_t,        // Public static method name compatible with delegateType
+	delegate_type: *const char_t,      // Assembly qualified delegate type name or null,
+									   // or UNMANAGEDCALLERSONLY_METHOD if the method is marked with
+									   // the UnmanagedCallersOnlyAttribute.
+	load_context: *const std::ffi::c_void, // Extensibility parameter (currently unused and must be 0)
+	reserved: *const std::ffi::c_void, // Extensibility parameter (currently unused and must be 0)
+	delegate: *mut *mut std::ffi::c_void, // Pointer where to store the function pointer result
+) -> i32;
+
+pub type load_assembly_fn = unsafe extern "C" fn(
+	assembly_path: *const char_t,      // Fully qualified path to assembly
+	load_context: *const std::ffi::c_void, // Extensibility parameter (currently unused and must be 0)
+	reserved: *const std::ffi::c_void, // Extensibility parameter (currently unused and must be 0)
+) -> i32;
+
+pub type load_assembly_bytes_fn = unsafe extern "C" fn(
+	assembly_bytes: *const std::ffi::c_void,    // Bytes of the assembly to load
+	assembly_bytes_len: usize,                  // Byte length of the assembly to load
+	symbols_bytes: *const std::ffi::c_void,     // Optional. Bytes of the symbols for the assembly
+	symbols_bytes_len: usize,                   // Optional. Byte length of the symbols for the assembly
+	load_context: *const std::ffi::c_void,      // Extensibility parameter (currently unused and must be 0)
+	reserved: *const std::ffi::c_void,          // Extensibility parameter (currently unused and must be 0)
+) -> i32;

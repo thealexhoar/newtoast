@@ -13,22 +13,29 @@ cmake_intermediate_target := "Visual Studio 17 2022"
 
 dir_build := "build"
 dir_build_engine := dir_build + "/engine"
-dir_build_engine_exe := dir_build_engine + "/exe"
-dir_build_engine_lib := dir_build_engine + "/lib"
 dir_build_framework := dir_build + "/framework"
-dir_cmake_src_engine := "engine"
+
+dir_src_engine := "engine"
 
 cleanup-build-dir:
     #!C:/msys64/usr/bin/bash.exe
     rm -rf "{{dir_build}}"
 
+# build-engine:
+#     #!C:/msys64/usr/bin/bash.exe
+#     mkdir -p "{{dir_build_engine}}"
+#     cmake -S "{{dir_src_engine}}" -B "{{dir_build_engine}}" -G "{{cmake_intermediate_target}}"
+#     "{{msbuild}}" {{dir_build_engine}}/Project.sln
+#     cp {{dir_build_engine_lib}}/Debug/newtoast-core.dll {{dir_build_engine_exe}}/Debug
+#     cp deps/lib/nethost.dll {{dir_build_engine_exe}}/Debug
+
 build-engine:
     #!C:/msys64/usr/bin/bash.exe
     mkdir -p "{{dir_build_engine}}"
-    cmake -S "{{dir_cmake_src_engine}}" -B "{{dir_build_engine}}" -G "{{cmake_intermediate_target}}"
-    "{{msbuild}}" {{dir_build_engine}}/Project.sln
-    cp {{dir_build_engine_lib}}/Debug/newtoast-core.dll {{dir_build_engine_exe}}/Debug
-    cp {{dir_cmake_src_engine}}/deps/lib/nethost.dll {{dir_build_engine_exe}}/Debug
+    export NETHOST_LIB_PATH="$(pwd)/deps/lib/"
+    cargo build --manifest-path "{{dir_src_engine}}"/Cargo.toml --target-dir "{{dir_build_engine}}"
+    cp deps/lib/nethost.dll {{dir_build_engine}}/debug
+
 
 build-framework:
     #!C:/msys64/usr/bin/bash.exe
@@ -36,11 +43,12 @@ build-framework:
     dotnet build framework/NT.csproj -o "{{dir_build_framework}}"
 
 
-build: cleanup-build-dir build-engine build-framework
+build: build-engine build-framework
+clean-build: cleanup-build-dir build
 
 run:
     #!C:/msys64/usr/bin/bash.exe
-    ./"{{dir_build_engine}}"/exe/Debug/newtoast.exe
+    ./"{{dir_build_engine}}"/debug/newtoast-engine.exe
 
 
 build-and-run: build run

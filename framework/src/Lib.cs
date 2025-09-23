@@ -7,10 +7,10 @@ namespace NTF
     public static partial class Lib
     {
 
-        [LibraryImport("newtoast-core", EntryPoint = "test_internal_call")]
+        [LibraryImport("newtoast_engine", EntryPoint = "test_internal_call")]
         public static partial int TestInternalCall(int x);
 
-        [LibraryImport("newtoast-core", EntryPoint = "test_internal_ptr_return_call")]
+        [LibraryImport("newtoast_engine", EntryPoint = "test_internal_ptr_return_call")]
         public static partial IntPtr TestInternalPtrReturnCall();
     }
 }

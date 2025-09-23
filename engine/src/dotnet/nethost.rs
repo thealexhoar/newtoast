@@ -1,9 +1,5 @@
 use std::os::raw::c_int;
-
-#[cfg(windows)]
-pub type char_t = u16;
-#[cfg(not(windows))]
-pub type char_t = u8;
+use crate::ffi_char_t::char_t;
 
 
 // Parameters for get_hostfxr_path
@@ -24,19 +20,19 @@ pub type char_t = u8;
 //
 #[repr(C)]
 pub struct GetHostfxrParameters {
-	pub size: usize,
-	pub assembly_path: *const char_t,
-	pub dotnet_root: *const char_t,
+    pub size: usize,
+    pub assembly_path: *const char_t,
+    pub dotnet_root: *const char_t,
 }
 
 #[cfg_attr(windows, link(name = "nethost"))]
 extern "C" {
-	/// Get the path to the hostfxr library
-	///
-	/// Returns 0 on success, otherwise failure
-	pub fn get_hostfxr_path(
-		buffer: *mut char_t,
-		buffer_size: *mut usize,
-		parameters: *const GetHostfxrParameters,
-	) -> c_int;
+    /// Get the path to the hostfxr library
+    ///
+    /// Returns 0 on success, otherwise failure
+    pub fn get_hostfxr_path(
+        buffer: *mut char_t,
+        buffer_size: *mut usize,
+        parameters: *const GetHostfxrParameters,
+    ) -> c_int;
 }

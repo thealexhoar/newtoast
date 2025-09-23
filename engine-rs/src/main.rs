@@ -1,4 +1,0 @@
-mod dotnet;
-
-fn main() {
-}
