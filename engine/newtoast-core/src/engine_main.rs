@@ -89,9 +89,9 @@ pub fn engine_main() {
 fn core_loop<'lib, 'ctx>(lib: &'lib libloading::Library, dotnet: &'ctx mut DotnetContext<'lib>) {
     let mut frame = 0;
     loop {
-        std::thread::sleep(std::time::Duration::from_secs(1));
+        std::thread::sleep(std::time::Duration::from_millis(17));
         frame += 1;
         println!("Frame {}", frame);
-        if frame > 10 { break };
+        if frame == 60 { break };
     }
 }

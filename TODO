@@ -1,0 +1,9 @@
+23 September 2025
+DONE add sdl3-sys-rs dep (I used submodules)
+    ? should it be a git submodule
+DONE add SDL dep (also a submdule but GitKraken made it ezpz)
+    ? should it be a git submodule
+
+TODO build SDL for the targeted version in sdl3-sys-rs
+
+TODO 
