@@ -1,5 +1,6 @@
 
 [workspace]
+resolver = "2"
 members = [
     "newtoast-core",
     "newtoast-bin",

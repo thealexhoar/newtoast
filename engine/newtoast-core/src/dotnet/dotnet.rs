@@ -9,13 +9,16 @@ use crate::ffi_char_t::char_t;
 
 use crate::dotnet::{hostfxr, nethost};
 
-pub struct DotnetFunctionPtr<'ctx> {
+#[derive(Copy, Clone, Debug)]
+pub struct DotnetFunctionPtr {
     fptr: *mut std::ffi::c_void,
 
-    _phantom: std::marker::PhantomData<&'ctx ()>,
 }
 
-impl <'ctx> DotnetFunctionPtr<'ctx> {
+unsafe impl Send for DotnetFunctionPtr {}
+unsafe impl Sync for DotnetFunctionPtr {}
+
+impl  DotnetFunctionPtr {
     pub unsafe fn reify<F: DotnetFunction>(&self) -> &F {
         &*(self.fptr as *const F)
     }
@@ -74,6 +77,7 @@ dotnet_function_impls!(
     __arg1: A1, __arg2: A2, __arg3: A3, __arg4: A4, __arg5: A5, __arg6: A6,
     __arg7: A7, __arg8: A8, __arg9: A9, __arg10: A10, __arg11: A11, __arg12: A12);
 
+
 pub struct DotnetContext<'lib> {
     hostfxr_handle: hostfxr::hostfxr_handle,
 
@@ -89,7 +93,7 @@ pub struct DotnetContext<'lib> {
     delegate_load_assembly_bytes: hostfxr::load_assembly_bytes_fn,
 }
 
-impl<'lib,'ctx> DotnetContext<'lib> {
+impl<'lib,> DotnetContext<'lib> {
     pub fn load_assembly(&mut self, path: &str) {
         unsafe {
             let load_assembly = self.delegate_load_assembly;
@@ -105,11 +109,11 @@ impl<'lib,'ctx> DotnetContext<'lib> {
     }
 
     pub fn get_fn_pointer(
-        &'ctx self,
+        &self,
         type_name: &str,
         method_name: &str,
         delegate_type_name: &str
-    ) -> DotnetFunctionPtr<'ctx> {
+    ) -> DotnetFunctionPtr {
         unsafe {
             let mut fptr = std::ptr::null_mut();
             let get_fptr = self.delegate_get_fptr;
@@ -125,7 +129,10 @@ impl<'lib,'ctx> DotnetContext<'lib> {
                 &mut fptr
             );
 
-            DotnetFunctionPtr { fptr, _phantom: std::marker::PhantomData }
+            DotnetFunctionPtr {
+                fptr,
+                // _phantom: std::marker::PhantomData
+            }
         }
     }
 }
