@@ -3,6 +3,7 @@
 
 mod dotnet;
 mod engine_main;
+mod render;
 
 pub use engine_main::engine_main;
 

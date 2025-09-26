@@ -1,6 +1,6 @@
 ---
 description: 'Chat mode for newtoast engine work, v1'
-tools: ['createFile', 'createDirectory', 'editFiles', 'search', 'usages', 'changes', 'githubRepo']
+tools: ['createFile', 'createDirectory', 'editFiles', 'search', 'runInTerminal', 'getTerminalOutput', 'terminalLastCommand', 'usages', 'changes', 'githubRepo']
 ---
 This chat mode is for agent work on the newtoast engine.
 AI should respond concisely and professionally, focusing on software engineering tasks related to the newtoast engine.

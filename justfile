@@ -6,9 +6,11 @@ alias r := run
 
 alias br := build-and-run
 
-set quiet := true
+set quiet := false
 set shell := ["bash", "-eu", "-c"]
 set windows-shell := ["C:/Program Files/Git/usr/bin/bash.exe", "-eu", "-c"]
+
+msbuild := "'C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/MSBuild.exe'"
 
 current_timestamp := `date +%s`
 
@@ -20,11 +22,15 @@ dir_build_binaries := dir_build_engine + "/debug"
 dir_src_engine := "engine"
 dir_src_framework := "framework"
 
-path_nethost_lib := `echo $(pwd)/deps/lib`
+dir_lib := "deps/lib"
+
+full_path_lib := `echo $(pwd)/deps/lib`
+
+path_nethost_dll := dir_lib + "/nethost.dll"
+path_sdl_dll := dir_lib + "/SDL3.dll"
 
 file_cargo_toml := dir_src_engine + "/Cargo.toml"
 file_framework_csproj := dir_src_framework + "/NT.csproj"
-file_nethost_dll := "deps/lib/nethost.dll"
 
 file_buildstamp_engine := dir_build + "/.engine.buildstamp"
 file_buildstamp_framework := dir_build + "/.framework.buildstamp"
@@ -41,19 +47,16 @@ update_prunes_framework := "(/bin|/obj)"
 
 
 _latest_update_engine_full := ("find "+dir_src_engine+" -type f -printf '%T@ %p\\n' | grep -ivE '"+update_prunes_engine+"' | sort -n | tail -n 1 ")
-
-# "| cut -d '.' -f 1 " +
 latest_update_engine_full := shell(_latest_update_engine_full)
 
 latest_update_engine := shell("echo " + latest_update_engine_full + " | cut -d '.' -f 1")
 
 _latest_update_framework_full := ("find "+dir_src_framework+" -type f -printf '%T@ %p\\n' | grep -ivE '"+update_prunes_framework+"' | sort -n | tail -n 1 ")
-
-#   "| cut -d '.' -f 1 " +
 latest_update_framework_full := shell(_latest_update_framework_full)
 
 latest_update_framework := shell("echo " + latest_update_framework_full + " | cut -d '.' -f 1")
 
+file_pattern_dlls := "deps/lib/*.dll"
 
 show-timestamps:
     echo 'current timestamp: {{current_timestamp}}'
@@ -66,9 +69,9 @@ show-timestamps:
 _actually_build_engine := (
     "rm -rf '"+dir_build_engine+"' && " +
     "mkdir -p '"+dir_build_engine+"' && " +
-    "export NETHOST_LIB_PATH=\""+path_nethost_lib+"\" && " +
+    "export NEWTOAST_DEP_LIB_PATH=\""+full_path_lib+"\" && " +
     "cargo build --manifest-path '"+file_cargo_toml+"' --target-dir '"+dir_build_engine+"' && " +
-    "cp "+file_nethost_dll+" "+dir_build_binaries+" && " +
+
     update_buildstamp_engine
 )
 
@@ -76,11 +79,7 @@ _skip_build_engine := "echo 'No changes in engine source since last build. Skipp
 
 build-engine:
     if [[ {{buildstamp_engine}} -lt {{latest_update_engine}} ]]; then {{_actually_build_engine}}; else {{_skip_build_engine}} ; fi
-
-
-clean-engine:
-    cd {{dir_src_engine}} && cargo clean
-
+    cp -f {{file_pattern_dlls}} {{dir_build_binaries}}
 
 _actually_build_framework := (
     "rm -rf '"+dir_build_framework+"' && " +
@@ -95,20 +94,21 @@ build-framework:
     if [[ {{buildstamp_framework}} -lt {{latest_update_framework}} ]]; then {{_actually_build_framework}} ; else {{_skip_build_framework}} ; fi
 
 
-clean-framework:
-    cd {{dir_src_framework}} && dotnet clean
-
-
 build: build-engine build-framework
 
 
+clean-engine:
+    cd {{dir_src_engine}} && cargo clean
+
+clean-framework:
+    cd {{dir_src_framework}} && dotnet clean
+
 clean: clean-engine clean-framework
     rm -rf '{{dir_build}}'
-
 clean-build: clean build
 
 run:
-    ./'{{dir_build_engine}}'/debug/newtoast.exe
+    env RUST_BACKTRACE=1 ./'{{dir_build_engine}}'/debug/newtoast.exe
 
 
 build-and-run: build run
@@ -117,3 +117,11 @@ build-and-run: build run
 check:
     export NETHOST_LIB_PATH="$(pwd)/deps/lib/"
     cargo check --manifest-path '{{dir_src_engine}}'/Cargo.toml
+
+
+build-sdl:
+    mkdir -p deps/SDL/build
+    cmake -S deps/SDL -B deps/SDL/build
+    {{msbuild}} deps/SDL/build/SDL3.sln
+    cp deps/SDL/build/Debug/SDL3.dll deps/lib/SDL3.dll
+    cp deps/SDL/build/Debug/SDL3.lib deps/lib/SDL3.lib

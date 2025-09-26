@@ -23,14 +23,15 @@ SOFTWARE.
 */
 
 pub use imgui;
-
-use imgui::{ConfigFlags, Context, Key as ImGuiKey, MouseCursor};
-use imgui_opengl_renderer::Renderer;
+use glow::Context as GlowContext;
+use imgui::{ConfigFlags, Context, Key as ImGuiKey, MouseCursor, Textures};
 use std::ffi::{CStr, CString};
 use std::os::raw::{c_char, c_void};
 use std::time::Instant;
 
 use sdl3_sys::everything::*;
+
+use crate::render::{annotated_gl_proc_address_getter, gl_get_proc_address};
 
 struct SdlClipboardBackend(*mut SDL_Window);
 
@@ -61,12 +62,12 @@ pub struct ImguiSdl {
 	mouse_press: [bool; 5],
 	cursor_pos: (f32, f32),
 	cursor: (MouseCursor, Option<SDL_SystemCursor>),//FIXME
-	renderer: Renderer,
-	window: *mut SDL_Window,
+	textures: Textures<glow::Texture>,
+	renderer: imgui_glow_renderer::Renderer,
 }
 
 impl ImguiSdl {
-	pub fn new(imgui: &mut Context, window: *mut SDL_Window) -> Self {
+	pub fn new(gl: &GlowContext, imgui: &mut Context, window: *mut SDL_Window) -> Self {
 		unsafe {
 			imgui.set_clipboard_backend(SdlClipboardBackend(window));
 		}
@@ -96,20 +97,23 @@ impl ImguiSdl {
 		io_mut.key_map[ImGuiKey::Y as usize] = SDL_SCANCODE_Y.0 as u32;
 		io_mut.key_map[ImGuiKey::Z as usize] = SDL_SCANCODE_Z.0 as u32;
 
-		let renderer = Renderer::new(imgui, |s| {
-			unsafe {
-				let func_ptr = SDL_GL_GetProcAddress(s.as_ptr() as *const c_char).unwrap();
-				std::mem::transmute(func_ptr)
-			}
-		});
+
+		// let renderer = Renderer::new(imgui, gl_get_proc_address);
+		let mut textures = Textures::default();
+		let renderer = imgui_glow_renderer::Renderer::new(
+			gl,
+			imgui,
+			&mut textures,
+			true
+		).expect("Failed to initialize imgui_glow_renderer");
 
 		Self {
 			last_frame: Instant::now(),
 			mouse_press: [false; 5],
 			cursor_pos: (0., 0.),
 			cursor: (MouseCursor::Arrow, None),
+			textures,
 			renderer,
-			window,
 		}
 	}
 
@@ -122,8 +126,8 @@ impl ImguiSdl {
 						SDL_BUTTON_LEFT => 0,
 						SDL_BUTTON_RIGHT => 1,
 						SDL_BUTTON_MIDDLE => 2,
-						4 => 3, // X1
-						5 => 4, // X2
+						SDL_BUTTON_X1 => 3,
+						SDL_BUTTON_X2 => 4,
 						_ => 0,
 					};
 					self.mouse_press[index] = true;
@@ -143,8 +147,8 @@ impl ImguiSdl {
 					imgui.io_mut().mouse_down = self.mouse_press;
 				}
 				x if x == SDL_EVENT_MOUSE_MOTION.into() => {
-					let x = event.motion.x as f32;
-					let y = event.motion.y as f32;
+					let x = event.motion.x;
+					let y = event.motion.y;
 					imgui.io_mut().mouse_pos = [x, y];
 					self.cursor_pos = (x, y);
 				}
@@ -153,26 +157,26 @@ impl ImguiSdl {
 					imgui.io_mut().mouse_wheel = y;
 				}
 				x if x == SDL_EVENT_TEXT_INPUT.into() => {
-					let text = CStr::from_ptr(event.text.text).to_string_lossy();
+					// let text = CStr::from_ptr(event.text.text).to_string_lossy();
+					let text = CStr::from_ptr(event.text.text).to_string_lossy().into_owned();
 					for ch in text.chars() {
 						imgui.io_mut().add_input_character(ch);
 					}
 				}
 				x if x == SDL_EVENT_KEY_DOWN.into() || x == SDL_EVENT_KEY_UP.into() => {
 					let pressed = event.etype == SDL_EVENT_KEY_DOWN.into();
-					let scancode_int: std::os::raw::c_int = event.key.scancode.into();
-					let scancode = scancode_int as usize;
+					let scancode = event.key.scancode.0 as usize;
 					if scancode < imgui.io().keys_down.len() {
 						imgui.io_mut().keys_down[scancode] = pressed;
 					}
-					Self::set_mod(imgui, event.key.r#mod);
+					Self::set_mod(imgui, event.key.mods);
 				}
 				_ => {}
 			}
 		}
 	}
 
-	pub fn frame<'a>(&mut self, imgui: &'a mut Context) -> &'a mut imgui::Ui {
+	pub fn frame<'a>(&mut self, imgui: &'a mut Context, window: *mut SDL_Window) -> &'a mut imgui::Ui {
 		let io = imgui.io_mut();
 
 		let now = Instant::now();
@@ -184,7 +188,7 @@ impl ImguiSdl {
 		unsafe {
 			let mut w = 0;
 			let mut h = 0;
-			SDL_GetWindowSize(self.window, &mut w, &mut h);
+			SDL_GetWindowSize(window, &mut w, &mut h);
 			io.display_size = [w as f32, h as f32];
 		}
 
@@ -195,7 +199,7 @@ impl ImguiSdl {
 			match ui.mouse_cursor() {
 				Some(mouse_cursor) if !io.mouse_draw_cursor => {
 					unsafe {
-						SDL_SetWindowMouseGrab(self.window, false);
+						SDL_SetWindowMouseGrab(window, false);
 						let cursor = match mouse_cursor {
 							MouseCursor::TextInput => SDL_SYSTEM_CURSOR_TEXT,
 							MouseCursor::ResizeNS => SDL_SYSTEM_CURSOR_NS_RESIZE,
@@ -219,11 +223,21 @@ impl ImguiSdl {
 			}
 		}
 
+		if io.want_text_input {
+			unsafe { SDL_StartTextInput(window); }
+		}
+		else {
+			unsafe { SDL_StopTextInput(window); }
+		}
+
 		ui
 	}
 
-	pub fn draw<'ui>(&mut self, imgui: &mut Context) {
-		self.renderer.render(imgui);
+	pub fn draw<'ui>(&mut self, gl: &GlowContext, imgui: &mut Context) {
+		let draw_data = imgui.render();
+
+		self.renderer.render(gl, &self.textures, draw_data)
+			.expect("Imgui rendering failed");
 	}
 
 	fn set_mod(imgui: &mut Context, modifier: SDL_Keymod) {

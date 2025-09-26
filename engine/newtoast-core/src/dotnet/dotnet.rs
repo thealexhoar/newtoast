@@ -24,6 +24,7 @@ impl  DotnetFunctionPtr {
     }
 
     pub unsafe fn call<A, O>(&self, args: A,) -> O {
+        let _ = self.fptr;
         (&*(self.fptr as *const fn(A)->O)).call_dotnet(self.fptr, args)
     }
 }

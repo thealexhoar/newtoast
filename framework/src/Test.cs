@@ -1,9 +1,13 @@
+using NTF;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
+
+
+[assembly:NTEntrypointSpecifier("NTF", "Test")]
 
 namespace NTF
 {
@@ -16,8 +20,9 @@ namespace NTF
 
     public delegate void EnqueueFn(int x);
     public delegate void DumpQueueFn();
+    public delegate bool FindEntrypointFn(ref NTEntrypointSpecifier entrypoint);
 
-    public static class Test
+    public class Test
     {
         static ConcurrentQueue<int> q = new();
 
@@ -26,6 +31,9 @@ namespace NTF
 
         public static int Foo()
         {
+            Console.WriteLine("Hello from Test.Foo!");
+
+
             return 12345;
         }
 
@@ -64,6 +72,28 @@ namespace NTF
             {
                 foreach (var i in q2) Console.WriteLine($"  {i}");
             }
+        }
+
+
+        public static bool FindEntrypoint(ref NTEntrypointSpecifier entrypoint)
+        {
+            Console.WriteLine("Finding entrypoint via FindEntrypoint()");
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            // var output = new NTEntrypointSpecifier();
+            var outputSet = false;
+            foreach (var asm in assemblies)
+            {
+                var allAttrs = asm.GetCustomAttributes(typeof(NTEntrypointSpecifierAttribute), false);
+                var attrs = (NTEntrypointSpecifierAttribute[])allAttrs;
+                if (attrs.Length > 0)
+                {
+                    entrypoint.NsName = attrs[0].NsName;
+                    entrypoint.ClassName = attrs[0].ClassName;
+                    return true;
+                    // output.i = 12;
+                }
+            }
+            return false;
         }
 
     }

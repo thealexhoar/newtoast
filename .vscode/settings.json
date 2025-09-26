@@ -3,6 +3,7 @@
         "engine/Cargo.toml"
     ],
     "rust-analyzer.cargo.extraEnv": {
-        "NETHOST_LIB_PATH": "C:/users/theal/Projects/newtoast/deps/lib"
-    }
+        "NEWTOAST_DEP_LIB_PATH": "C:/users/theal/Projects/newtoast/deps/lib"
+    },
+    "dotnet.defaultSolution": "disable"
 }

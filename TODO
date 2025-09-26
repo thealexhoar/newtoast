@@ -4,6 +4,9 @@ DONE add sdl3-sys-rs dep (I used submodules)
 DONE add SDL dep (also a submdule but GitKraken made it ezpz)
     ? should it be a git submodule
 
-TODO build SDL for the targeted version in sdl3-sys-rs
+DONE build SDL for the targeted version in sdl3-sys-rs
+    - also switched to symlinking dlls
 
-TODO 
+24 September 2025
+TODO struct for window/gl_ctx
+    - should it also own our gpu resources?
