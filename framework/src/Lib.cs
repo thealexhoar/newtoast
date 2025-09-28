@@ -18,28 +18,5 @@ namespace NTF
 
     }
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-    public struct NTEntrypointSpecifier
-    {
-
-        [MarshalAs(UnmanagedType.LPStr)]
-        public string NsName;
-
-        [MarshalAs(UnmanagedType.LPStr)]
-        public string ClassName;
-        // public int i;
-    }
-
-
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class NTEntrypointSpecifierAttribute : Attribute
-    {
-        public readonly string NsName, ClassName;
-
-        public NTEntrypointSpecifierAttribute(string nsName, string className)
-        {
-            NsName = nsName;
-            ClassName = className;
-        }
-    }
+    
 }

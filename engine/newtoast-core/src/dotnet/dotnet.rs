@@ -1,6 +1,7 @@
 // src/dotnet/dotnet.rs
 // This file is intentionally left blank. Add your Rust code here for dotnet interop or related logic.
 
+use std::mem::transmute;
 use std::{ffi::OsString, os::windows::ffi::OsStrExt};
 use libloading::{Library, Symbol};
 
@@ -12,49 +13,81 @@ use crate::dotnet::{hostfxr, nethost};
 #[derive(Copy, Clone, Debug)]
 pub struct DotnetFunctionPtr {
     fptr: *mut std::ffi::c_void,
-
 }
 
-unsafe impl Send for DotnetFunctionPtr {}
-unsafe impl Sync for DotnetFunctionPtr {}
+//HACK the odds this still meets Send/Sync requirements is probably about 6%
+// unsafe impl Send for DotnetFunctionPtr {}
+// unsafe impl Sync for DotnetFunctionPtr {}
 
-impl  DotnetFunctionPtr {
+impl DotnetFunctionPtr {
     pub unsafe fn reify<F: DotnetFunction>(&self) -> &F {
         &*(self.fptr as *const F)
     }
 
-    pub unsafe fn call<A, O>(&self, args: A,) -> O {
-        let _ = self.fptr;
-        (&*(self.fptr as *const fn(A)->O)).call_dotnet(self.fptr, args)
+    pub unsafe fn call<F: DotnetFunction>(&self, args: F::Args) -> F::Output
+    {
+        self.reify::<F>().call_dotnet(args)
     }
 }
 
-pub trait DotnetFunction {
+
+pub unsafe trait DotnetFunction : Sized + Copy + 'static {
     type Args;
     type Output;
-    const ARITY: usize;
+    type Managed: ManagedDotnetFunction<Args=Self::Args, Output=Self::Output>;
 
-    unsafe fn call_dotnet(&self, raw_ptr: *mut std::ffi::c_void, args: Self::Args) -> Self::Output;
+    unsafe fn call_dotnet(&self, args: Self::Args) -> Self::Output;
+}
+
+pub unsafe trait ManagedDotnetFunction : DotnetFunction {
+    type Args;
+    type Output;
 }
 
 macro_rules! dotnet_function_impls {
     (@count ()) => {
         0
     };
+
     (@count ($first: tt $($rest: tt)*)) => {
         1 + dotnet_function_impls!(@count ($($rest)*))
     };
+
     (@inner $($arg_name:ident : $arg_type:ident),*) => {
-        impl<O, $($arg_type),*> DotnetFunction for fn($($arg_type),*) -> O {
+        dotnet_function_impls!(@inner_inner ($($arg_name : $arg_type),*) (fn($($arg_type),*) -> O) (extern "system" fn($($arg_type),*) -> O));
+        dotnet_function_impls!(@inner_inner ($($arg_name : $arg_type),*) (unsafe fn($($arg_type),*) -> O) (unsafe extern "system" fn($($arg_type),*) -> O));
+    };
+
+    (@inner_inner ($($arg_name:ident : $arg_type : ident),*) ($fn_type:ty) ($ext_type:ty)) => {
+        unsafe impl<O: 'static, $($arg_type: 'static),*> DotnetFunction for $fn_type {
             type Args = ($($arg_type),*);
             type Output = O;
-            const ARITY: usize = dotnet_function_impls!(@count ($($arg_type)*));
+            type Managed = $ext_type;
 
-            unsafe fn call_dotnet(&self, raw_ptr: *mut std::ffi::c_void, args: Self::Args) -> Self::Output {
-                let reified_fptr: fn($($arg_type),*) -> O = std::mem::transmute(raw_ptr);
+            unsafe fn call_dotnet(&self, args: Self::Args) -> Self::Output {
+                assert!(self as *const _ != std::ptr::null());
+                let reified_fptr: $ext_type = std::mem::transmute(self);
                 let ($($arg_name),*) = args;
                 reified_fptr($($arg_name),*)
             }
+        }
+
+        unsafe impl<O: 'static, $($arg_type: 'static),*> DotnetFunction for $ext_type {
+            type Args = ($($arg_type),*);
+            type Output = O;
+            type Managed = $ext_type;
+
+            unsafe fn call_dotnet(&self, args: Self::Args) -> Self::Output {
+                assert!(self as *const _ != std::ptr::null());
+                let reified_fptr: $ext_type = std::mem::transmute(self);
+                let ($($arg_name),*) = args;
+                reified_fptr($($arg_name),*)
+            }
+        }
+
+        unsafe impl<O: 'static, $($arg_type: 'static),*> ManagedDotnetFunction for $ext_type {
+            type Args = ($($arg_type),*);
+            type Output = O;
         }
     };
 
@@ -74,9 +107,10 @@ macro_rules! dotnet_function_impls {
 }
 
 
-dotnet_function_impls!(
+dotnet_function_impls! {
     __arg1: A1, __arg2: A2, __arg3: A3, __arg4: A4, __arg5: A5, __arg6: A6,
-    __arg7: A7, __arg8: A8, __arg9: A9, __arg10: A10, __arg11: A11, __arg12: A12);
+    __arg7: A7, __arg8: A8, __arg9: A9, __arg10: A10, __arg11: A11, __arg12: A12
+}
 
 
 pub struct DotnetContext<'lib> {
@@ -94,7 +128,7 @@ pub struct DotnetContext<'lib> {
     delegate_load_assembly_bytes: hostfxr::load_assembly_bytes_fn,
 }
 
-impl<'lib,> DotnetContext<'lib> {
+impl<'lib> DotnetContext<'lib> {
     pub fn load_assembly(&mut self, path: &str) {
         unsafe {
             let load_assembly = self.delegate_load_assembly;
@@ -109,8 +143,8 @@ impl<'lib,> DotnetContext<'lib> {
         }
     }
 
-    pub fn get_fn_pointer(
-        &self,
+    pub fn get_fn_pointer<'dn>(
+        &'dn self,
         type_name: &str,
         method_name: &str,
         delegate_type_name: &str
@@ -129,10 +163,10 @@ impl<'lib,> DotnetContext<'lib> {
                 std::ptr::null_mut(),
                 &mut fptr
             );
+            assert!(!fptr.is_null());
 
             DotnetFunctionPtr {
                 fptr,
-                // _phantom: std::marker::PhantomData
             }
         }
     }
@@ -147,9 +181,6 @@ pub fn load_hostfxr() -> Library {
             &mut buffer_size,
             std::ptr::null(),
         );
-        println!("get_hostfxr_path rc: {}", rc);
-        assert_eq!(rc, 0);
-        println!("buffer size: {}", buffer_size);
         let mut path=  String::from_utf16(&buffer).unwrap();
         path.truncate(buffer_size);
         println!("hostfxr path:\n  {}", path);
@@ -182,7 +213,6 @@ pub fn create_context<'lib>(hostfxr_lib: &'lib Library, runtimeconfig_path: &str
             std::ptr::null_mut(),
             &mut hostfxr_handle
         );
-        println!("init_with_config rc: {}", rc);
         assert_eq!(rc, 0);
 
         //TODO error handling

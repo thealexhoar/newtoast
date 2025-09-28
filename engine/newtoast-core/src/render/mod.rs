@@ -5,7 +5,7 @@ mod imgui_sdl;
 
 use std::ffi::CStr;
 
-use glow::{HasContext, NativeTexture};
+use glow::{HasContext};
 use sdl3_sys::everything::*;
 
 use crate::render::imgui_sdl::ImguiSdl;
@@ -21,7 +21,6 @@ pub enum RenderError {
 
 pub struct RenderContext {
     window: *mut SDL_Window,
-    renderer: *mut SDL_Renderer,
     gl_context: *mut SDL_GLContextState,
     gl: glow::Context,
     imgui: imgui::Context,
@@ -50,21 +49,15 @@ impl RenderContext {
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
 
-            let mut window = std::ptr::null_mut();
-            let mut renderer = std::ptr::null_mut();
 
             // TODO gl attrs
-
-            let create_window_result = SDL_CreateWindowAndRenderer(
+            let window = SDL_CreateWindow(
                 title.as_ptr() as *const i8,
                 960, 640,
                 SDL_WINDOW_OPENGL,
-                &mut window,
-                &mut renderer
             );
 
-
-            if false == create_window_result {
+            if window.is_null() {
                 let sdl_err = CStr::from_ptr(SDL_GetError()).to_string_lossy().into_owned();
                 return Err(RenderError::WindowCreationFailed(sdl_err));
             }
@@ -91,10 +84,7 @@ impl RenderContext {
 
             let imgui_sdl = ImguiSdl::new(&gl, &mut imgui, window);
 
-            //SDL configuration
-            // let present_mode = sdl3_sys::gpu::SDL_GPUPresentMode::VSYNC;
-
-            let set_vsync_result = SDL_SetRenderVSync(renderer, 1); // sync every 1th frame
+            let set_vsync_result = SDL_GL_SetSwapInterval( 1); // sync every 1th frame
 
             if false == set_vsync_result {
                 let sdl_err = CStr::from_ptr(SDL_GetError()).to_string_lossy().into_owned();
@@ -104,7 +94,6 @@ impl RenderContext {
 
             Ok(Self {
                 window,
-                renderer, //FIXME do I need this?
                 gl_context,
                 gl,
                 imgui,

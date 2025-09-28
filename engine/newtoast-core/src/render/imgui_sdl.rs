@@ -26,14 +26,13 @@ pub use imgui;
 use glow::Context as GlowContext;
 use imgui::{ConfigFlags, Context, Key as ImGuiKey, MouseCursor, Textures};
 use std::ffi::{CStr, CString};
-use std::os::raw::{c_char, c_void};
+use std::os::raw::c_void;
 use std::time::Instant;
 
 use sdl3_sys::everything::*;
 
-use crate::render::{annotated_gl_proc_address_getter, gl_get_proc_address};
 
-struct SdlClipboardBackend(*mut SDL_Window);
+struct SdlClipboardBackend;
 
 impl imgui::ClipboardBackend for SdlClipboardBackend {
 	fn get(&mut self) -> Option<String> {
@@ -69,7 +68,7 @@ pub struct ImguiSdl {
 impl ImguiSdl {
 	pub fn new(gl: &GlowContext, imgui: &mut Context, window: *mut SDL_Window) -> Self {
 		unsafe {
-			imgui.set_clipboard_backend(SdlClipboardBackend(window));
+			imgui.set_clipboard_backend(SdlClipboardBackend);
 		}
 
 		let io_mut = imgui.io_mut();

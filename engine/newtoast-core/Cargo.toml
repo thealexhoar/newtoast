@@ -8,11 +8,13 @@ name = "newtoast_core"
 crate-type = ["rlib", "cdylib"]
 
 [dependencies]
+lazy_static = { version = "1.5.0" }
 libloading =  { version = "0.8.9" }
 
 glow = { version = "0.14.0" } # pinned to imgui_glow_renderer version
 imgui-glow-renderer = { version = "0.13.0" }
 
+widestring = { version = "1.2.0" }
 
 [dependencies.sdl3-sys]
 path = "../../deps/sdl3-sys-rs/sdl3-sys"
