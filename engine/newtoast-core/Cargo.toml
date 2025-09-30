@@ -11,9 +11,11 @@ crate-type = ["rlib", "cdylib"]
 lazy_static = { version = "1.5.0" }
 libloading =  { version = "0.8.9" }
 
+glam = { version = "0.30.8", features = [] }
 glow = { version = "0.14.0" } # pinned to imgui_glow_renderer version
 imgui-glow-renderer = { version = "0.13.0" }
 
+smallvec = "1.15.1"
 widestring = { version = "1.2.0" }
 
 [dependencies.sdl3-sys]

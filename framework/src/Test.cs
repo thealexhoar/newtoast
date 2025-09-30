@@ -9,25 +9,24 @@ using System.Threading;
 
 namespace NTF
 {
-
-    public class Test : NTEntryPoint
+    public class Test : NTEntrypoint
     {
-        public static void Initialize()
+        public void Initialize()
         {
             Console.WriteLine("Hello from Test.Load!");
         }
 
-        public static void Shutdown()
+        public void Shutdown()
         {
             Console.WriteLine("Hello from Test.Unload!");
         }
 
-        public static void Update(double dt)
+        public void Update(double dt)
         {
             Console.WriteLine("Hello from Test.Update!");
         }
 
-        public static void Draw()
+        public void Draw()
         {
             Console.WriteLine("Hello from Test.Draw!");
         }
