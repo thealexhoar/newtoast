@@ -12,7 +12,7 @@ using GlmSharp.Swizzle;
 
 namespace GlmSharp
 {
-    
+
     /// <summary>
     /// A matrix of type long with 4 columns and 3 rows.
     /// </summary>
@@ -23,73 +23,73 @@ namespace GlmSharp
     {
 
         #region Fields
-        
+
         /// <summary>
         /// Column 0, Rows 0
         /// </summary>
         [DataMember]
         public long m00;
-        
+
         /// <summary>
         /// Column 0, Rows 1
         /// </summary>
         [DataMember]
         public long m01;
-        
+
         /// <summary>
         /// Column 0, Rows 2
         /// </summary>
         [DataMember]
         public long m02;
-        
+
         /// <summary>
         /// Column 1, Rows 0
         /// </summary>
         [DataMember]
         public long m10;
-        
+
         /// <summary>
         /// Column 1, Rows 1
         /// </summary>
         [DataMember]
         public long m11;
-        
+
         /// <summary>
         /// Column 1, Rows 2
         /// </summary>
         [DataMember]
         public long m12;
-        
+
         /// <summary>
         /// Column 2, Rows 0
         /// </summary>
         [DataMember]
         public long m20;
-        
+
         /// <summary>
         /// Column 2, Rows 1
         /// </summary>
         [DataMember]
         public long m21;
-        
+
         /// <summary>
         /// Column 2, Rows 2
         /// </summary>
         [DataMember]
         public long m22;
-        
+
         /// <summary>
         /// Column 3, Rows 0
         /// </summary>
         [DataMember]
         public long m30;
-        
+
         /// <summary>
         /// Column 3, Rows 1
         /// </summary>
         [DataMember]
         public long m31;
-        
+
         /// <summary>
         /// Column 3, Rows 2
         /// </summary>
@@ -100,7 +100,7 @@ namespace GlmSharp
 
 
         #region Constructors
-        
+
         /// <summary>
         /// Component-wise constructor
         /// </summary>
@@ -119,7 +119,7 @@ namespace GlmSharp
             this.m31 = m31;
             this.m32 = m32;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a lmat2. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -138,7 +138,7 @@ namespace GlmSharp
             this.m31 = 0;
             this.m32 = 0;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a lmat3x2. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -157,7 +157,7 @@ namespace GlmSharp
             this.m31 = 0;
             this.m32 = 0;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a lmat4x2. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -176,7 +176,7 @@ namespace GlmSharp
             this.m31 = m.m31;
             this.m32 = 0;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a lmat2x3. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -195,7 +195,7 @@ namespace GlmSharp
             this.m31 = 0;
             this.m32 = 0;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a lmat3. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -214,7 +214,7 @@ namespace GlmSharp
             this.m31 = 0;
             this.m32 = 0;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a lmat4x3. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -233,7 +233,7 @@ namespace GlmSharp
             this.m31 = m.m31;
             this.m32 = m.m32;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a lmat2x4. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -252,7 +252,7 @@ namespace GlmSharp
             this.m31 = 0;
             this.m32 = 0;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a lmat3x4. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -271,7 +271,7 @@ namespace GlmSharp
             this.m31 = 0;
             this.m32 = 0;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a lmat4. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -290,7 +290,7 @@ namespace GlmSharp
             this.m31 = m.m31;
             this.m32 = m.m32;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a series of column vectors. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -309,7 +309,7 @@ namespace GlmSharp
             this.m31 = 0;
             this.m32 = 0;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a series of column vectors. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -328,7 +328,7 @@ namespace GlmSharp
             this.m31 = 0;
             this.m32 = 0;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a series of column vectors. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -347,7 +347,7 @@ namespace GlmSharp
             this.m31 = c3.y;
             this.m32 = 0;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a series of column vectors. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -366,7 +366,7 @@ namespace GlmSharp
             this.m31 = 0;
             this.m32 = 0;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a series of column vectors. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -385,7 +385,7 @@ namespace GlmSharp
             this.m31 = 0;
             this.m32 = 0;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a series of column vectors. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -409,17 +409,17 @@ namespace GlmSharp
 
 
         #region Properties
-        
+
         /// <summary>
         /// Creates a 2D array with all values (address: Values[x, y])
         /// </summary>
         public long[,] Values => new[,] { { m00, m01, m02 }, { m10, m11, m12 }, { m20, m21, m22 }, { m30, m31, m32 } };
-        
+
         /// <summary>
         /// Creates a 1D array with all values (internal order)
         /// </summary>
         public long[] Values1D => new[] { m00, m01, m02, m10, m11, m12, m20, m21, m22, m30, m31, m32 };
-        
+
         /// <summary>
         /// Gets or sets the column nr 0
         /// </summary>
@@ -436,7 +436,7 @@ namespace GlmSharp
                 m02 = value.z;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the column nr 1
         /// </summary>
@@ -453,7 +453,7 @@ namespace GlmSharp
                 m12 = value.z;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the column nr 2
         /// </summary>
@@ -470,7 +470,7 @@ namespace GlmSharp
                 m22 = value.z;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the column nr 3
         /// </summary>
@@ -487,7 +487,7 @@ namespace GlmSharp
                 m32 = value.z;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the row nr 0
         /// </summary>
@@ -505,7 +505,7 @@ namespace GlmSharp
                 m30 = value.w;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the row nr 1
         /// </summary>
@@ -523,7 +523,7 @@ namespace GlmSharp
                 m31 = value.w;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the row nr 2
         /// </summary>
@@ -546,37 +546,37 @@ namespace GlmSharp
 
 
         #region Static Properties
-        
+
         /// <summary>
         /// Predefined all-zero matrix
         /// </summary>
         public static lmat4x3 Zero { get; } = new lmat4x3(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-        
+
         /// <summary>
         /// Predefined all-ones matrix
         /// </summary>
         public static lmat4x3 Ones { get; } = new lmat4x3(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-        
+
         /// <summary>
         /// Predefined identity matrix
         /// </summary>
         public static lmat4x3 Identity { get; } = new lmat4x3(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0);
-        
+
         /// <summary>
         /// Predefined all-MaxValue matrix
         /// </summary>
         public static lmat4x3 AllMaxValue { get; } = new lmat4x3(long.MaxValue, long.MaxValue, long.MaxValue, long.MaxValue, long.MaxValue, long.MaxValue, long.MaxValue, long.MaxValue, long.MaxValue, long.MaxValue, long.MaxValue, long.MaxValue);
-        
+
         /// <summary>
         /// Predefined diagonal-MaxValue matrix
         /// </summary>
         public static lmat4x3 DiagonalMaxValue { get; } = new lmat4x3(long.MaxValue, 0, 0, 0, long.MaxValue, 0, 0, 0, long.MaxValue, 0, 0, 0);
-        
+
         /// <summary>
         /// Predefined all-MinValue matrix
         /// </summary>
         public static lmat4x3 AllMinValue { get; } = new lmat4x3(long.MinValue, long.MinValue, long.MinValue, long.MinValue, long.MinValue, long.MinValue, long.MinValue, long.MinValue, long.MinValue, long.MinValue, long.MinValue, long.MinValue);
-        
+
         /// <summary>
         /// Predefined diagonal-MinValue matrix
         /// </summary>
@@ -586,7 +586,7 @@ namespace GlmSharp
 
 
         #region Functions
-        
+
         /// <summary>
         /// Returns an enumerator that iterates through all fields.
         /// </summary>
@@ -605,7 +605,7 @@ namespace GlmSharp
             yield return m31;
             yield return m32;
         }
-        
+
         /// <summary>
         /// Returns an enumerator that iterates through all fields.
         /// </summary>
@@ -613,12 +613,12 @@ namespace GlmSharp
 
         #endregion
 
-        
+
         /// <summary>
         /// Returns the number of Fields (4 x 3 = 12).
         /// </summary>
         public int Count => 12;
-        
+
         /// <summary>
         /// Gets/Sets a specific indexed component (a bit slower than direct access).
         /// </summary>
@@ -663,7 +663,7 @@ namespace GlmSharp
                 }
             }
         }
-        
+
         /// <summary>
         /// Gets/Sets a specific 2D-indexed component (a bit slower than direct access).
         /// </summary>
@@ -678,12 +678,12 @@ namespace GlmSharp
                 this[col * 3 + row] = value;
             }
         }
-        
+
         /// <summary>
         /// Returns true iff this equals rhs component-wise.
         /// </summary>
         public bool Equals(lmat4x3 rhs) => ((((m00.Equals(rhs.m00) && m01.Equals(rhs.m01)) && m02.Equals(rhs.m02)) && ((m10.Equals(rhs.m10) && m11.Equals(rhs.m11)) && m12.Equals(rhs.m12))) && (((m20.Equals(rhs.m20) && m21.Equals(rhs.m21)) && m22.Equals(rhs.m22)) && ((m30.Equals(rhs.m30) && m31.Equals(rhs.m31)) && m32.Equals(rhs.m32))));
-        
+
         /// <summary>
         /// Returns true iff this equals rhs type- and component-wise.
         /// </summary>
@@ -692,17 +692,17 @@ namespace GlmSharp
             if (ReferenceEquals(null, obj)) return false;
             return obj is lmat4x3 && Equals((lmat4x3) obj);
         }
-        
+
         /// <summary>
         /// Returns true iff this equals rhs component-wise.
         /// </summary>
         public static bool operator ==(lmat4x3 lhs, lmat4x3 rhs) => lhs.Equals(rhs);
-        
+
         /// <summary>
         /// Returns true iff this does not equal rhs (component-wise).
         /// </summary>
         public static bool operator !=(lmat4x3 lhs, lmat4x3 rhs) => !lhs.Equals(rhs);
-        
+
         /// <summary>
         /// Returns a hash code for this instance.
         /// </summary>
@@ -713,277 +713,277 @@ namespace GlmSharp
                 return ((((((((((((((((((((((m00.GetHashCode()) * 397) ^ m01.GetHashCode()) * 397) ^ m02.GetHashCode()) * 397) ^ m10.GetHashCode()) * 397) ^ m11.GetHashCode()) * 397) ^ m12.GetHashCode()) * 397) ^ m20.GetHashCode()) * 397) ^ m21.GetHashCode()) * 397) ^ m22.GetHashCode()) * 397) ^ m30.GetHashCode()) * 397) ^ m31.GetHashCode()) * 397) ^ m32.GetHashCode();
             }
         }
-        
+
         /// <summary>
         /// Returns a transposed version of this matrix.
         /// </summary>
         public lmat3x4 Transposed => new lmat3x4(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32);
-        
+
         /// <summary>
         /// Returns the minimal component of this matrix.
         /// </summary>
         public long MinElement => Math.Min(Math.Min(Math.Min(Math.Min(Math.Min(Math.Min(Math.Min(Math.Min(Math.Min(Math.Min(Math.Min(m00, m01), m02), m10), m11), m12), m20), m21), m22), m30), m31), m32);
-        
+
         /// <summary>
         /// Returns the maximal component of this matrix.
         /// </summary>
         public long MaxElement => Math.Max(Math.Max(Math.Max(Math.Max(Math.Max(Math.Max(Math.Max(Math.Max(Math.Max(Math.Max(Math.Max(m00, m01), m02), m10), m11), m12), m20), m21), m22), m30), m31), m32);
-        
+
         /// <summary>
         /// Returns the euclidean length of this matrix.
         /// </summary>
         public double Length => (double)Math.Sqrt(((((m00*m00 + m01*m01) + m02*m02) + ((m10*m10 + m11*m11) + m12*m12)) + (((m20*m20 + m21*m21) + m22*m22) + ((m30*m30 + m31*m31) + m32*m32))));
-        
+
         /// <summary>
         /// Returns the squared euclidean length of this matrix.
         /// </summary>
         public double LengthSqr => ((((m00*m00 + m01*m01) + m02*m02) + ((m10*m10 + m11*m11) + m12*m12)) + (((m20*m20 + m21*m21) + m22*m22) + ((m30*m30 + m31*m31) + m32*m32)));
-        
+
         /// <summary>
         /// Returns the sum of all fields.
         /// </summary>
         public long Sum => ((((m00 + m01) + m02) + ((m10 + m11) + m12)) + (((m20 + m21) + m22) + ((m30 + m31) + m32)));
-        
+
         /// <summary>
         /// Returns the euclidean norm of this matrix.
         /// </summary>
         public double Norm => (double)Math.Sqrt(((((m00*m00 + m01*m01) + m02*m02) + ((m10*m10 + m11*m11) + m12*m12)) + (((m20*m20 + m21*m21) + m22*m22) + ((m30*m30 + m31*m31) + m32*m32))));
-        
+
         /// <summary>
         /// Returns the one-norm of this matrix.
         /// </summary>
         public double Norm1 => ((((Math.Abs(m00) + Math.Abs(m01)) + Math.Abs(m02)) + ((Math.Abs(m10) + Math.Abs(m11)) + Math.Abs(m12))) + (((Math.Abs(m20) + Math.Abs(m21)) + Math.Abs(m22)) + ((Math.Abs(m30) + Math.Abs(m31)) + Math.Abs(m32))));
-        
+
         /// <summary>
         /// Returns the two-norm of this matrix.
         /// </summary>
         public double Norm2 => (double)Math.Sqrt(((((m00*m00 + m01*m01) + m02*m02) + ((m10*m10 + m11*m11) + m12*m12)) + (((m20*m20 + m21*m21) + m22*m22) + ((m30*m30 + m31*m31) + m32*m32))));
-        
+
         /// <summary>
         /// Returns the max-norm of this matrix.
         /// </summary>
         public long NormMax => Math.Max(Math.Max(Math.Max(Math.Max(Math.Max(Math.Max(Math.Max(Math.Max(Math.Max(Math.Max(Math.Max(Math.Abs(m00), Math.Abs(m01)), Math.Abs(m02)), Math.Abs(m10)), Math.Abs(m11)), Math.Abs(m12)), Math.Abs(m20)), Math.Abs(m21)), Math.Abs(m22)), Math.Abs(m30)), Math.Abs(m31)), Math.Abs(m32));
-        
+
         /// <summary>
         /// Returns the p-norm of this matrix.
         /// </summary>
         public double NormP(double p) => Math.Pow(((((Math.Pow((double)Math.Abs(m00), p) + Math.Pow((double)Math.Abs(m01), p)) + Math.Pow((double)Math.Abs(m02), p)) + ((Math.Pow((double)Math.Abs(m10), p) + Math.Pow((double)Math.Abs(m11), p)) + Math.Pow((double)Math.Abs(m12), p))) + (((Math.Pow((double)Math.Abs(m20), p) + Math.Pow((double)Math.Abs(m21), p)) + Math.Pow((double)Math.Abs(m22), p)) + ((Math.Pow((double)Math.Abs(m30), p) + Math.Pow((double)Math.Abs(m31), p)) + Math.Pow((double)Math.Abs(m32), p)))), 1 / p);
-        
+
         /// <summary>
         /// Executes a matrix-matrix-multiplication lmat4x3 * lmat2x4 -> lmat2x3.
         /// </summary>
         public static lmat2x3 operator*(lmat4x3 lhs, lmat2x4 rhs) => new lmat2x3(((lhs.m00 * rhs.m00 + lhs.m10 * rhs.m01) + (lhs.m20 * rhs.m02 + lhs.m30 * rhs.m03)), ((lhs.m01 * rhs.m00 + lhs.m11 * rhs.m01) + (lhs.m21 * rhs.m02 + lhs.m31 * rhs.m03)), ((lhs.m02 * rhs.m00 + lhs.m12 * rhs.m01) + (lhs.m22 * rhs.m02 + lhs.m32 * rhs.m03)), ((lhs.m00 * rhs.m10 + lhs.m10 * rhs.m11) + (lhs.m20 * rhs.m12 + lhs.m30 * rhs.m13)), ((lhs.m01 * rhs.m10 + lhs.m11 * rhs.m11) + (lhs.m21 * rhs.m12 + lhs.m31 * rhs.m13)), ((lhs.m02 * rhs.m10 + lhs.m12 * rhs.m11) + (lhs.m22 * rhs.m12 + lhs.m32 * rhs.m13)));
-        
+
         /// <summary>
         /// Executes a matrix-matrix-multiplication lmat4x3 * lmat3x4 -> lmat3.
         /// </summary>
         public static lmat3 operator*(lmat4x3 lhs, lmat3x4 rhs) => new lmat3(((lhs.m00 * rhs.m00 + lhs.m10 * rhs.m01) + (lhs.m20 * rhs.m02 + lhs.m30 * rhs.m03)), ((lhs.m01 * rhs.m00 + lhs.m11 * rhs.m01) + (lhs.m21 * rhs.m02 + lhs.m31 * rhs.m03)), ((lhs.m02 * rhs.m00 + lhs.m12 * rhs.m01) + (lhs.m22 * rhs.m02 + lhs.m32 * rhs.m03)), ((lhs.m00 * rhs.m10 + lhs.m10 * rhs.m11) + (lhs.m20 * rhs.m12 + lhs.m30 * rhs.m13)), ((lhs.m01 * rhs.m10 + lhs.m11 * rhs.m11) + (lhs.m21 * rhs.m12 + lhs.m31 * rhs.m13)), ((lhs.m02 * rhs.m10 + lhs.m12 * rhs.m11) + (lhs.m22 * rhs.m12 + lhs.m32 * rhs.m13)), ((lhs.m00 * rhs.m20 + lhs.m10 * rhs.m21) + (lhs.m20 * rhs.m22 + lhs.m30 * rhs.m23)), ((lhs.m01 * rhs.m20 + lhs.m11 * rhs.m21) + (lhs.m21 * rhs.m22 + lhs.m31 * rhs.m23)), ((lhs.m02 * rhs.m20 + lhs.m12 * rhs.m21) + (lhs.m22 * rhs.m22 + lhs.m32 * rhs.m23)));
-        
+
         /// <summary>
         /// Executes a matrix-matrix-multiplication lmat4x3 * lmat4 -> lmat4x3.
         /// </summary>
         public static lmat4x3 operator*(lmat4x3 lhs, lmat4 rhs) => new lmat4x3(((lhs.m00 * rhs.m00 + lhs.m10 * rhs.m01) + (lhs.m20 * rhs.m02 + lhs.m30 * rhs.m03)), ((lhs.m01 * rhs.m00 + lhs.m11 * rhs.m01) + (lhs.m21 * rhs.m02 + lhs.m31 * rhs.m03)), ((lhs.m02 * rhs.m00 + lhs.m12 * rhs.m01) + (lhs.m22 * rhs.m02 + lhs.m32 * rhs.m03)), ((lhs.m00 * rhs.m10 + lhs.m10 * rhs.m11) + (lhs.m20 * rhs.m12 + lhs.m30 * rhs.m13)), ((lhs.m01 * rhs.m10 + lhs.m11 * rhs.m11) + (lhs.m21 * rhs.m12 + lhs.m31 * rhs.m13)), ((lhs.m02 * rhs.m10 + lhs.m12 * rhs.m11) + (lhs.m22 * rhs.m12 + lhs.m32 * rhs.m13)), ((lhs.m00 * rhs.m20 + lhs.m10 * rhs.m21) + (lhs.m20 * rhs.m22 + lhs.m30 * rhs.m23)), ((lhs.m01 * rhs.m20 + lhs.m11 * rhs.m21) + (lhs.m21 * rhs.m22 + lhs.m31 * rhs.m23)), ((lhs.m02 * rhs.m20 + lhs.m12 * rhs.m21) + (lhs.m22 * rhs.m22 + lhs.m32 * rhs.m23)), ((lhs.m00 * rhs.m30 + lhs.m10 * rhs.m31) + (lhs.m20 * rhs.m32 + lhs.m30 * rhs.m33)), ((lhs.m01 * rhs.m30 + lhs.m11 * rhs.m31) + (lhs.m21 * rhs.m32 + lhs.m31 * rhs.m33)), ((lhs.m02 * rhs.m30 + lhs.m12 * rhs.m31) + (lhs.m22 * rhs.m32 + lhs.m32 * rhs.m33)));
-        
+
         /// <summary>
         /// Executes a matrix-vector-multiplication.
         /// </summary>
         public static lvec3 operator*(lmat4x3 m, lvec4 v) => new lvec3(((m.m00 * v.x + m.m10 * v.y) + (m.m20 * v.z + m.m30 * v.w)), ((m.m01 * v.x + m.m11 * v.y) + (m.m21 * v.z + m.m31 * v.w)), ((m.m02 * v.x + m.m12 * v.y) + (m.m22 * v.z + m.m32 * v.w)));
-        
+
         /// <summary>
         /// Executes a component-wise * (multiply).
         /// </summary>
         public static lmat4x3 CompMul(lmat4x3 A, lmat4x3 B) => new lmat4x3(A.m00 * B.m00, A.m01 * B.m01, A.m02 * B.m02, A.m10 * B.m10, A.m11 * B.m11, A.m12 * B.m12, A.m20 * B.m20, A.m21 * B.m21, A.m22 * B.m22, A.m30 * B.m30, A.m31 * B.m31, A.m32 * B.m32);
-        
+
         /// <summary>
         /// Executes a component-wise / (divide).
         /// </summary>
         public static lmat4x3 CompDiv(lmat4x3 A, lmat4x3 B) => new lmat4x3(A.m00 / B.m00, A.m01 / B.m01, A.m02 / B.m02, A.m10 / B.m10, A.m11 / B.m11, A.m12 / B.m12, A.m20 / B.m20, A.m21 / B.m21, A.m22 / B.m22, A.m30 / B.m30, A.m31 / B.m31, A.m32 / B.m32);
-        
+
         /// <summary>
         /// Executes a component-wise + (add).
         /// </summary>
         public static lmat4x3 CompAdd(lmat4x3 A, lmat4x3 B) => new lmat4x3(A.m00 + B.m00, A.m01 + B.m01, A.m02 + B.m02, A.m10 + B.m10, A.m11 + B.m11, A.m12 + B.m12, A.m20 + B.m20, A.m21 + B.m21, A.m22 + B.m22, A.m30 + B.m30, A.m31 + B.m31, A.m32 + B.m32);
-        
+
         /// <summary>
         /// Executes a component-wise - (subtract).
         /// </summary>
         public static lmat4x3 CompSub(lmat4x3 A, lmat4x3 B) => new lmat4x3(A.m00 - B.m00, A.m01 - B.m01, A.m02 - B.m02, A.m10 - B.m10, A.m11 - B.m11, A.m12 - B.m12, A.m20 - B.m20, A.m21 - B.m21, A.m22 - B.m22, A.m30 - B.m30, A.m31 - B.m31, A.m32 - B.m32);
-        
+
         /// <summary>
         /// Executes a component-wise + (add).
         /// </summary>
         public static lmat4x3 operator+(lmat4x3 lhs, lmat4x3 rhs) => new lmat4x3(lhs.m00 + rhs.m00, lhs.m01 + rhs.m01, lhs.m02 + rhs.m02, lhs.m10 + rhs.m10, lhs.m11 + rhs.m11, lhs.m12 + rhs.m12, lhs.m20 + rhs.m20, lhs.m21 + rhs.m21, lhs.m22 + rhs.m22, lhs.m30 + rhs.m30, lhs.m31 + rhs.m31, lhs.m32 + rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise + (add) with a scalar.
         /// </summary>
         public static lmat4x3 operator+(lmat4x3 lhs, long rhs) => new lmat4x3(lhs.m00 + rhs, lhs.m01 + rhs, lhs.m02 + rhs, lhs.m10 + rhs, lhs.m11 + rhs, lhs.m12 + rhs, lhs.m20 + rhs, lhs.m21 + rhs, lhs.m22 + rhs, lhs.m30 + rhs, lhs.m31 + rhs, lhs.m32 + rhs);
-        
+
         /// <summary>
         /// Executes a component-wise + (add) with a scalar.
         /// </summary>
         public static lmat4x3 operator+(long lhs, lmat4x3 rhs) => new lmat4x3(lhs + rhs.m00, lhs + rhs.m01, lhs + rhs.m02, lhs + rhs.m10, lhs + rhs.m11, lhs + rhs.m12, lhs + rhs.m20, lhs + rhs.m21, lhs + rhs.m22, lhs + rhs.m30, lhs + rhs.m31, lhs + rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise - (subtract).
         /// </summary>
         public static lmat4x3 operator-(lmat4x3 lhs, lmat4x3 rhs) => new lmat4x3(lhs.m00 - rhs.m00, lhs.m01 - rhs.m01, lhs.m02 - rhs.m02, lhs.m10 - rhs.m10, lhs.m11 - rhs.m11, lhs.m12 - rhs.m12, lhs.m20 - rhs.m20, lhs.m21 - rhs.m21, lhs.m22 - rhs.m22, lhs.m30 - rhs.m30, lhs.m31 - rhs.m31, lhs.m32 - rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise - (subtract) with a scalar.
         /// </summary>
         public static lmat4x3 operator-(lmat4x3 lhs, long rhs) => new lmat4x3(lhs.m00 - rhs, lhs.m01 - rhs, lhs.m02 - rhs, lhs.m10 - rhs, lhs.m11 - rhs, lhs.m12 - rhs, lhs.m20 - rhs, lhs.m21 - rhs, lhs.m22 - rhs, lhs.m30 - rhs, lhs.m31 - rhs, lhs.m32 - rhs);
-        
+
         /// <summary>
         /// Executes a component-wise - (subtract) with a scalar.
         /// </summary>
         public static lmat4x3 operator-(long lhs, lmat4x3 rhs) => new lmat4x3(lhs - rhs.m00, lhs - rhs.m01, lhs - rhs.m02, lhs - rhs.m10, lhs - rhs.m11, lhs - rhs.m12, lhs - rhs.m20, lhs - rhs.m21, lhs - rhs.m22, lhs - rhs.m30, lhs - rhs.m31, lhs - rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise / (divide) with a scalar.
         /// </summary>
         public static lmat4x3 operator/(lmat4x3 lhs, long rhs) => new lmat4x3(lhs.m00 / rhs, lhs.m01 / rhs, lhs.m02 / rhs, lhs.m10 / rhs, lhs.m11 / rhs, lhs.m12 / rhs, lhs.m20 / rhs, lhs.m21 / rhs, lhs.m22 / rhs, lhs.m30 / rhs, lhs.m31 / rhs, lhs.m32 / rhs);
-        
+
         /// <summary>
         /// Executes a component-wise / (divide) with a scalar.
         /// </summary>
         public static lmat4x3 operator/(long lhs, lmat4x3 rhs) => new lmat4x3(lhs / rhs.m00, lhs / rhs.m01, lhs / rhs.m02, lhs / rhs.m10, lhs / rhs.m11, lhs / rhs.m12, lhs / rhs.m20, lhs / rhs.m21, lhs / rhs.m22, lhs / rhs.m30, lhs / rhs.m31, lhs / rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise * (multiply) with a scalar.
         /// </summary>
         public static lmat4x3 operator*(lmat4x3 lhs, long rhs) => new lmat4x3(lhs.m00 * rhs, lhs.m01 * rhs, lhs.m02 * rhs, lhs.m10 * rhs, lhs.m11 * rhs, lhs.m12 * rhs, lhs.m20 * rhs, lhs.m21 * rhs, lhs.m22 * rhs, lhs.m30 * rhs, lhs.m31 * rhs, lhs.m32 * rhs);
-        
+
         /// <summary>
         /// Executes a component-wise * (multiply) with a scalar.
         /// </summary>
         public static lmat4x3 operator*(long lhs, lmat4x3 rhs) => new lmat4x3(lhs * rhs.m00, lhs * rhs.m01, lhs * rhs.m02, lhs * rhs.m10, lhs * rhs.m11, lhs * rhs.m12, lhs * rhs.m20, lhs * rhs.m21, lhs * rhs.m22, lhs * rhs.m30, lhs * rhs.m31, lhs * rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise % (modulo).
         /// </summary>
         public static lmat4x3 operator%(lmat4x3 lhs, lmat4x3 rhs) => new lmat4x3(lhs.m00 % rhs.m00, lhs.m01 % rhs.m01, lhs.m02 % rhs.m02, lhs.m10 % rhs.m10, lhs.m11 % rhs.m11, lhs.m12 % rhs.m12, lhs.m20 % rhs.m20, lhs.m21 % rhs.m21, lhs.m22 % rhs.m22, lhs.m30 % rhs.m30, lhs.m31 % rhs.m31, lhs.m32 % rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise % (modulo) with a scalar.
         /// </summary>
         public static lmat4x3 operator%(lmat4x3 lhs, long rhs) => new lmat4x3(lhs.m00 % rhs, lhs.m01 % rhs, lhs.m02 % rhs, lhs.m10 % rhs, lhs.m11 % rhs, lhs.m12 % rhs, lhs.m20 % rhs, lhs.m21 % rhs, lhs.m22 % rhs, lhs.m30 % rhs, lhs.m31 % rhs, lhs.m32 % rhs);
-        
+
         /// <summary>
         /// Executes a component-wise % (modulo) with a scalar.
         /// </summary>
         public static lmat4x3 operator%(long lhs, lmat4x3 rhs) => new lmat4x3(lhs % rhs.m00, lhs % rhs.m01, lhs % rhs.m02, lhs % rhs.m10, lhs % rhs.m11, lhs % rhs.m12, lhs % rhs.m20, lhs % rhs.m21, lhs % rhs.m22, lhs % rhs.m30, lhs % rhs.m31, lhs % rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise ^ (xor).
         /// </summary>
         public static lmat4x3 operator^(lmat4x3 lhs, lmat4x3 rhs) => new lmat4x3(lhs.m00 ^ rhs.m00, lhs.m01 ^ rhs.m01, lhs.m02 ^ rhs.m02, lhs.m10 ^ rhs.m10, lhs.m11 ^ rhs.m11, lhs.m12 ^ rhs.m12, lhs.m20 ^ rhs.m20, lhs.m21 ^ rhs.m21, lhs.m22 ^ rhs.m22, lhs.m30 ^ rhs.m30, lhs.m31 ^ rhs.m31, lhs.m32 ^ rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise ^ (xor) with a scalar.
         /// </summary>
         public static lmat4x3 operator^(lmat4x3 lhs, long rhs) => new lmat4x3(lhs.m00 ^ rhs, lhs.m01 ^ rhs, lhs.m02 ^ rhs, lhs.m10 ^ rhs, lhs.m11 ^ rhs, lhs.m12 ^ rhs, lhs.m20 ^ rhs, lhs.m21 ^ rhs, lhs.m22 ^ rhs, lhs.m30 ^ rhs, lhs.m31 ^ rhs, lhs.m32 ^ rhs);
-        
+
         /// <summary>
         /// Executes a component-wise ^ (xor) with a scalar.
         /// </summary>
         public static lmat4x3 operator^(long lhs, lmat4x3 rhs) => new lmat4x3(lhs ^ rhs.m00, lhs ^ rhs.m01, lhs ^ rhs.m02, lhs ^ rhs.m10, lhs ^ rhs.m11, lhs ^ rhs.m12, lhs ^ rhs.m20, lhs ^ rhs.m21, lhs ^ rhs.m22, lhs ^ rhs.m30, lhs ^ rhs.m31, lhs ^ rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise | (bitwise-or).
         /// </summary>
         public static lmat4x3 operator|(lmat4x3 lhs, lmat4x3 rhs) => new lmat4x3(lhs.m00 | rhs.m00, lhs.m01 | rhs.m01, lhs.m02 | rhs.m02, lhs.m10 | rhs.m10, lhs.m11 | rhs.m11, lhs.m12 | rhs.m12, lhs.m20 | rhs.m20, lhs.m21 | rhs.m21, lhs.m22 | rhs.m22, lhs.m30 | rhs.m30, lhs.m31 | rhs.m31, lhs.m32 | rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise | (bitwise-or) with a scalar.
         /// </summary>
         public static lmat4x3 operator|(lmat4x3 lhs, long rhs) => new lmat4x3(lhs.m00 | rhs, lhs.m01 | rhs, lhs.m02 | rhs, lhs.m10 | rhs, lhs.m11 | rhs, lhs.m12 | rhs, lhs.m20 | rhs, lhs.m21 | rhs, lhs.m22 | rhs, lhs.m30 | rhs, lhs.m31 | rhs, lhs.m32 | rhs);
-        
+
         /// <summary>
         /// Executes a component-wise | (bitwise-or) with a scalar.
         /// </summary>
         public static lmat4x3 operator|(long lhs, lmat4x3 rhs) => new lmat4x3(lhs | rhs.m00, lhs | rhs.m01, lhs | rhs.m02, lhs | rhs.m10, lhs | rhs.m11, lhs | rhs.m12, lhs | rhs.m20, lhs | rhs.m21, lhs | rhs.m22, lhs | rhs.m30, lhs | rhs.m31, lhs | rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise &amp; (bitwise-and).
         /// </summary>
         public static lmat4x3 operator&(lmat4x3 lhs, lmat4x3 rhs) => new lmat4x3(lhs.m00 & rhs.m00, lhs.m01 & rhs.m01, lhs.m02 & rhs.m02, lhs.m10 & rhs.m10, lhs.m11 & rhs.m11, lhs.m12 & rhs.m12, lhs.m20 & rhs.m20, lhs.m21 & rhs.m21, lhs.m22 & rhs.m22, lhs.m30 & rhs.m30, lhs.m31 & rhs.m31, lhs.m32 & rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise &amp; (bitwise-and) with a scalar.
         /// </summary>
         public static lmat4x3 operator&(lmat4x3 lhs, long rhs) => new lmat4x3(lhs.m00 & rhs, lhs.m01 & rhs, lhs.m02 & rhs, lhs.m10 & rhs, lhs.m11 & rhs, lhs.m12 & rhs, lhs.m20 & rhs, lhs.m21 & rhs, lhs.m22 & rhs, lhs.m30 & rhs, lhs.m31 & rhs, lhs.m32 & rhs);
-        
+
         /// <summary>
         /// Executes a component-wise &amp; (bitwise-and) with a scalar.
         /// </summary>
         public static lmat4x3 operator&(long lhs, lmat4x3 rhs) => new lmat4x3(lhs & rhs.m00, lhs & rhs.m01, lhs & rhs.m02, lhs & rhs.m10, lhs & rhs.m11, lhs & rhs.m12, lhs & rhs.m20, lhs & rhs.m21, lhs & rhs.m22, lhs & rhs.m30, lhs & rhs.m31, lhs & rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise left-shift with a scalar.
         /// </summary>
         public static lmat4x3 operator<<(lmat4x3 lhs, int rhs) => new lmat4x3(lhs.m00 << rhs, lhs.m01 << rhs, lhs.m02 << rhs, lhs.m10 << rhs, lhs.m11 << rhs, lhs.m12 << rhs, lhs.m20 << rhs, lhs.m21 << rhs, lhs.m22 << rhs, lhs.m30 << rhs, lhs.m31 << rhs, lhs.m32 << rhs);
-        
+
         /// <summary>
         /// Executes a component-wise right-shift with a scalar.
         /// </summary>
         public static lmat4x3 operator>>(lmat4x3 lhs, int rhs) => new lmat4x3(lhs.m00 >> rhs, lhs.m01 >> rhs, lhs.m02 >> rhs, lhs.m10 >> rhs, lhs.m11 >> rhs, lhs.m12 >> rhs, lhs.m20 >> rhs, lhs.m21 >> rhs, lhs.m22 >> rhs, lhs.m30 >> rhs, lhs.m31 >> rhs, lhs.m32 >> rhs);
-        
+
         /// <summary>
         /// Executes a component-wise lesser-than comparison.
         /// </summary>
         public static bmat4x3 operator<(lmat4x3 lhs, lmat4x3 rhs) => new bmat4x3(lhs.m00 < rhs.m00, lhs.m01 < rhs.m01, lhs.m02 < rhs.m02, lhs.m10 < rhs.m10, lhs.m11 < rhs.m11, lhs.m12 < rhs.m12, lhs.m20 < rhs.m20, lhs.m21 < rhs.m21, lhs.m22 < rhs.m22, lhs.m30 < rhs.m30, lhs.m31 < rhs.m31, lhs.m32 < rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise lesser-than comparison with a scalar.
         /// </summary>
         public static bmat4x3 operator<(lmat4x3 lhs, long rhs) => new bmat4x3(lhs.m00 < rhs, lhs.m01 < rhs, lhs.m02 < rhs, lhs.m10 < rhs, lhs.m11 < rhs, lhs.m12 < rhs, lhs.m20 < rhs, lhs.m21 < rhs, lhs.m22 < rhs, lhs.m30 < rhs, lhs.m31 < rhs, lhs.m32 < rhs);
-        
+
         /// <summary>
         /// Executes a component-wise lesser-than comparison with a scalar.
         /// </summary>
         public static bmat4x3 operator<(long lhs, lmat4x3 rhs) => new bmat4x3(lhs < rhs.m00, lhs < rhs.m01, lhs < rhs.m02, lhs < rhs.m10, lhs < rhs.m11, lhs < rhs.m12, lhs < rhs.m20, lhs < rhs.m21, lhs < rhs.m22, lhs < rhs.m30, lhs < rhs.m31, lhs < rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise lesser-or-equal comparison.
         /// </summary>
         public static bmat4x3 operator<=(lmat4x3 lhs, lmat4x3 rhs) => new bmat4x3(lhs.m00 <= rhs.m00, lhs.m01 <= rhs.m01, lhs.m02 <= rhs.m02, lhs.m10 <= rhs.m10, lhs.m11 <= rhs.m11, lhs.m12 <= rhs.m12, lhs.m20 <= rhs.m20, lhs.m21 <= rhs.m21, lhs.m22 <= rhs.m22, lhs.m30 <= rhs.m30, lhs.m31 <= rhs.m31, lhs.m32 <= rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise lesser-or-equal comparison with a scalar.
         /// </summary>
         public static bmat4x3 operator<=(lmat4x3 lhs, long rhs) => new bmat4x3(lhs.m00 <= rhs, lhs.m01 <= rhs, lhs.m02 <= rhs, lhs.m10 <= rhs, lhs.m11 <= rhs, lhs.m12 <= rhs, lhs.m20 <= rhs, lhs.m21 <= rhs, lhs.m22 <= rhs, lhs.m30 <= rhs, lhs.m31 <= rhs, lhs.m32 <= rhs);
-        
+
         /// <summary>
         /// Executes a component-wise lesser-or-equal comparison with a scalar.
         /// </summary>
         public static bmat4x3 operator<=(long lhs, lmat4x3 rhs) => new bmat4x3(lhs <= rhs.m00, lhs <= rhs.m01, lhs <= rhs.m02, lhs <= rhs.m10, lhs <= rhs.m11, lhs <= rhs.m12, lhs <= rhs.m20, lhs <= rhs.m21, lhs <= rhs.m22, lhs <= rhs.m30, lhs <= rhs.m31, lhs <= rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise greater-than comparison.
         /// </summary>
         public static bmat4x3 operator>(lmat4x3 lhs, lmat4x3 rhs) => new bmat4x3(lhs.m00 > rhs.m00, lhs.m01 > rhs.m01, lhs.m02 > rhs.m02, lhs.m10 > rhs.m10, lhs.m11 > rhs.m11, lhs.m12 > rhs.m12, lhs.m20 > rhs.m20, lhs.m21 > rhs.m21, lhs.m22 > rhs.m22, lhs.m30 > rhs.m30, lhs.m31 > rhs.m31, lhs.m32 > rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise greater-than comparison with a scalar.
         /// </summary>
         public static bmat4x3 operator>(lmat4x3 lhs, long rhs) => new bmat4x3(lhs.m00 > rhs, lhs.m01 > rhs, lhs.m02 > rhs, lhs.m10 > rhs, lhs.m11 > rhs, lhs.m12 > rhs, lhs.m20 > rhs, lhs.m21 > rhs, lhs.m22 > rhs, lhs.m30 > rhs, lhs.m31 > rhs, lhs.m32 > rhs);
-        
+
         /// <summary>
         /// Executes a component-wise greater-than comparison with a scalar.
         /// </summary>
         public static bmat4x3 operator>(long lhs, lmat4x3 rhs) => new bmat4x3(lhs > rhs.m00, lhs > rhs.m01, lhs > rhs.m02, lhs > rhs.m10, lhs > rhs.m11, lhs > rhs.m12, lhs > rhs.m20, lhs > rhs.m21, lhs > rhs.m22, lhs > rhs.m30, lhs > rhs.m31, lhs > rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise greater-or-equal comparison.
         /// </summary>
         public static bmat4x3 operator>=(lmat4x3 lhs, lmat4x3 rhs) => new bmat4x3(lhs.m00 >= rhs.m00, lhs.m01 >= rhs.m01, lhs.m02 >= rhs.m02, lhs.m10 >= rhs.m10, lhs.m11 >= rhs.m11, lhs.m12 >= rhs.m12, lhs.m20 >= rhs.m20, lhs.m21 >= rhs.m21, lhs.m22 >= rhs.m22, lhs.m30 >= rhs.m30, lhs.m31 >= rhs.m31, lhs.m32 >= rhs.m32);
-        
+
         /// <summary>
         /// Executes a component-wise greater-or-equal comparison with a scalar.
         /// </summary>
         public static bmat4x3 operator>=(lmat4x3 lhs, long rhs) => new bmat4x3(lhs.m00 >= rhs, lhs.m01 >= rhs, lhs.m02 >= rhs, lhs.m10 >= rhs, lhs.m11 >= rhs, lhs.m12 >= rhs, lhs.m20 >= rhs, lhs.m21 >= rhs, lhs.m22 >= rhs, lhs.m30 >= rhs, lhs.m31 >= rhs, lhs.m32 >= rhs);
-        
+
         /// <summary>
         /// Executes a component-wise greater-or-equal comparison with a scalar.
         /// </summary>

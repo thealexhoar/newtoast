@@ -12,7 +12,7 @@ using GlmSharp.Swizzle;
 
 namespace GlmSharp
 {
-    
+
     /// <summary>
     /// A vector of type T with 4 components.
     /// </summary>
@@ -23,25 +23,25 @@ namespace GlmSharp
     {
 
         #region Fields
-        
+
         /// <summary>
         /// x-component
         /// </summary>
         [DataMember]
         public T x;
-        
+
         /// <summary>
         /// y-component
         /// </summary>
         [DataMember]
         public T y;
-        
+
         /// <summary>
         /// z-component
         /// </summary>
         [DataMember]
         public T z;
-        
+
         /// <summary>
         /// w-component
         /// </summary>
@@ -52,7 +52,7 @@ namespace GlmSharp
 
 
         #region Constructors
-        
+
         /// <summary>
         /// Component-wise constructor
         /// </summary>
@@ -63,7 +63,7 @@ namespace GlmSharp
             this.z = z;
             this.w = w;
         }
-        
+
         /// <summary>
         /// all-same-value constructor
         /// </summary>
@@ -74,7 +74,7 @@ namespace GlmSharp
             this.z = v;
             this.w = v;
         }
-        
+
         /// <summary>
         /// from-vector constructor (empty fields are zero/false)
         /// </summary>
@@ -82,10 +82,10 @@ namespace GlmSharp
         {
             this.x = v.x;
             this.y = v.y;
-            this.z = default(T);
-            this.w = default(T);
+            this.z = default!;
+            this.w = default!;
         }
-        
+
         /// <summary>
         /// from-vector-and-value constructor (empty fields are zero/false)
         /// </summary>
@@ -94,9 +94,9 @@ namespace GlmSharp
             this.x = v.x;
             this.y = v.y;
             this.z = z;
-            this.w = default(T);
+            this.w = default!;
         }
-        
+
         /// <summary>
         /// from-vector-and-value constructor
         /// </summary>
@@ -107,7 +107,7 @@ namespace GlmSharp
             this.z = z;
             this.w = w;
         }
-        
+
         /// <summary>
         /// from-vector constructor (empty fields are zero/false)
         /// </summary>
@@ -116,9 +116,9 @@ namespace GlmSharp
             this.x = v.x;
             this.y = v.y;
             this.z = v.z;
-            this.w = default(T);
+            this.w = default!;
         }
-        
+
         /// <summary>
         /// from-vector-and-value constructor
         /// </summary>
@@ -129,7 +129,7 @@ namespace GlmSharp
             this.z = v.z;
             this.w = w;
         }
-        
+
         /// <summary>
         /// from-vector constructor
         /// </summary>
@@ -140,55 +140,55 @@ namespace GlmSharp
             this.z = v.z;
             this.w = v.w;
         }
-        
+
         /// <summary>
         /// From-array/list constructor (superfluous values are ignored, missing values are zero-filled).
         /// </summary>
         public gvec4(IReadOnlyList<T> v)
         {
             var c = v.Count;
-            this.x = c < 0 ? default(T) : v[0];
-            this.y = c < 1 ? default(T) : v[1];
-            this.z = c < 2 ? default(T) : v[2];
-            this.w = c < 3 ? default(T) : v[3];
+            this.x = c < 0 ? default! : v[0];
+            this.y = c < 1 ? default! : v[1];
+            this.z = c < 2 ? default! : v[2];
+            this.w = c < 3 ? default! : v[3];
         }
-        
+
         /// <summary>
         /// Generic from-array constructor (superfluous values are ignored, missing values are zero-filled).
         /// </summary>
         public gvec4(Object[] v)
         {
             var c = v.Length;
-            this.x = c < 0 ? default(T) : (T)v[0];
-            this.y = c < 1 ? default(T) : (T)v[1];
-            this.z = c < 2 ? default(T) : (T)v[2];
-            this.w = c < 3 ? default(T) : (T)v[3];
+            this.x = c < 0 ? default! : (T)v[0];
+            this.y = c < 1 ? default! : (T)v[1];
+            this.z = c < 2 ? default! : (T)v[2];
+            this.w = c < 3 ? default! : (T)v[3];
         }
-        
+
         /// <summary>
         /// From-array constructor (superfluous values are ignored, missing values are zero-filled).
         /// </summary>
         public gvec4(T[] v)
         {
             var c = v.Length;
-            this.x = c < 0 ? default(T) : v[0];
-            this.y = c < 1 ? default(T) : v[1];
-            this.z = c < 2 ? default(T) : v[2];
-            this.w = c < 3 ? default(T) : v[3];
+            this.x = c < 0 ? default! : v[0];
+            this.y = c < 1 ? default! : v[1];
+            this.z = c < 2 ? default! : v[2];
+            this.w = c < 3 ? default! : v[3];
         }
-        
+
         /// <summary>
         /// From-array constructor with base index (superfluous values are ignored, missing values are zero-filled).
         /// </summary>
         public gvec4(T[] v, int startIndex)
         {
             var c = v.Length;
-            this.x = c + startIndex < 0 ? default(T) : v[0 + startIndex];
-            this.y = c + startIndex < 1 ? default(T) : v[1 + startIndex];
-            this.z = c + startIndex < 2 ? default(T) : v[2 + startIndex];
-            this.w = c + startIndex < 3 ? default(T) : v[3 + startIndex];
+            this.x = c + startIndex < 0 ? default! : v[0 + startIndex];
+            this.y = c + startIndex < 1 ? default! : v[1 + startIndex];
+            this.z = c + startIndex < 2 ? default! : v[2 + startIndex];
+            this.w = c + startIndex < 3 ? default! : v[3 + startIndex];
         }
-        
+
         /// <summary>
         /// From-IEnumerable constructor (superfluous values are ignored, missing values are zero-filled).
         /// </summary>
@@ -201,32 +201,32 @@ namespace GlmSharp
 
 
         #region Explicit Operators
-        
+
         /// <summary>
         /// Explicitly converts this to a gvec2.
         /// </summary>
         public static explicit operator gvec2<T>(gvec4<T> v) => new gvec2<T>((T)v.x, (T)v.y);
-        
+
         /// <summary>
         /// Explicitly converts this to a gvec3.
         /// </summary>
         public static explicit operator gvec3<T>(gvec4<T> v) => new gvec3<T>((T)v.x, (T)v.y, (T)v.z);
-        
+
         /// <summary>
         /// Explicitly converts this to a T array.
         /// </summary>
         public static explicit operator T[](gvec4<T> v) => new [] { v.x, v.y, v.z, v.w };
-        
+
         /// <summary>
         /// Explicitly converts this to a generic object array.
         /// </summary>
-        public static explicit operator Object[](gvec4<T> v) => new Object[] { v.x, v.y, v.z, v.w };
+        public static explicit operator Object[](gvec4<T> v) => new Object[] { v.x!, v.y!, v.z!, v.w! };
 
         #endregion
 
 
         #region Indexer
-        
+
         /// <summary>
         /// Gets/Sets a specific indexed component (a bit slower than direct access).
         /// </summary>
@@ -260,12 +260,12 @@ namespace GlmSharp
 
 
         #region Properties
-        
+
         /// <summary>
         /// Returns an object that can be used for arbitrary swizzling (e.g. swizzle.zy)
         /// </summary>
         public swizzle_gvec4<T> swizzle => new swizzle_gvec4<T>(x, y, z, w);
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -281,7 +281,7 @@ namespace GlmSharp
                 y = value.y;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -297,7 +297,7 @@ namespace GlmSharp
                 z = value.y;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -313,7 +313,7 @@ namespace GlmSharp
                 z = value.y;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -330,7 +330,7 @@ namespace GlmSharp
                 z = value.z;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -346,7 +346,7 @@ namespace GlmSharp
                 w = value.y;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -362,7 +362,7 @@ namespace GlmSharp
                 w = value.y;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -379,7 +379,7 @@ namespace GlmSharp
                 w = value.z;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -395,7 +395,7 @@ namespace GlmSharp
                 w = value.y;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -412,7 +412,7 @@ namespace GlmSharp
                 w = value.z;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -429,7 +429,7 @@ namespace GlmSharp
                 w = value.z;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -447,7 +447,7 @@ namespace GlmSharp
                 w = value.w;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -463,7 +463,7 @@ namespace GlmSharp
                 y = value.y;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -479,7 +479,7 @@ namespace GlmSharp
                 z = value.y;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -495,7 +495,7 @@ namespace GlmSharp
                 z = value.y;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -512,7 +512,7 @@ namespace GlmSharp
                 z = value.z;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -528,7 +528,7 @@ namespace GlmSharp
                 w = value.y;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -544,7 +544,7 @@ namespace GlmSharp
                 w = value.y;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -561,7 +561,7 @@ namespace GlmSharp
                 w = value.z;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -577,7 +577,7 @@ namespace GlmSharp
                 w = value.y;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -594,7 +594,7 @@ namespace GlmSharp
                 w = value.z;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -611,7 +611,7 @@ namespace GlmSharp
                 w = value.z;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified subset of components. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -629,7 +629,7 @@ namespace GlmSharp
                 w = value.w;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified RGBA component. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -644,7 +644,7 @@ namespace GlmSharp
                 x = value;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified RGBA component. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -659,7 +659,7 @@ namespace GlmSharp
                 y = value;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified RGBA component. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -674,7 +674,7 @@ namespace GlmSharp
                 z = value;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the specified RGBA component. For more advanced (read-only) swizzling, use the .swizzle property.
         /// </summary>
@@ -689,12 +689,12 @@ namespace GlmSharp
                 w = value;
             }
         }
-        
+
         /// <summary>
         /// Returns an array with all values
         /// </summary>
         public T[] Values => new[] { x, y, z, w };
-        
+
         /// <summary>
         /// Returns the number of components (4).
         /// </summary>
@@ -704,22 +704,22 @@ namespace GlmSharp
 
 
         #region Static Properties
-        
+
         /// <summary>
         /// Predefined all-zero vector
         /// </summary>
-        public static gvec4<T> Zero { get; } = new gvec4<T>(default(T), default(T), default(T), default(T));
+        public static gvec4<T> Zero { get; } = new gvec4<T>(default!, default!, default!, default!);
 
         #endregion
 
 
         #region Operators
-        
+
         /// <summary>
         /// Returns true iff this equals rhs component-wise.
         /// </summary>
         public static bool operator==(gvec4<T> lhs, gvec4<T> rhs) => lhs.Equals(rhs);
-        
+
         /// <summary>
         /// Returns true iff this does not equal rhs (component-wise).
         /// </summary>
@@ -729,7 +729,7 @@ namespace GlmSharp
 
 
         #region Functions
-        
+
         /// <summary>
         /// Returns an enumerator that iterates through all components.
         /// </summary>
@@ -740,27 +740,27 @@ namespace GlmSharp
             yield return z;
             yield return w;
         }
-        
+
         /// <summary>
         /// Returns an enumerator that iterates through all components.
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        
+
         /// <summary>
         /// Returns a string representation of this vector using ', ' as a seperator.
         /// </summary>
         public override string ToString() => ToString(", ");
-        
+
         /// <summary>
         /// Returns a string representation of this vector using a provided seperator.
         /// </summary>
         public string ToString(string sep) => ((x + sep + y) + sep + (z + sep + w));
-        
+
         /// <summary>
         /// Returns true iff this equals rhs component-wise.
         /// </summary>
         public bool Equals(gvec4<T> rhs) => ((EqualityComparer<T>.Default.Equals(x, rhs.x) && EqualityComparer<T>.Default.Equals(y, rhs.y)) && (EqualityComparer<T>.Default.Equals(z, rhs.z) && EqualityComparer<T>.Default.Equals(w, rhs.w)));
-        
+
         /// <summary>
         /// Returns true iff this equals rhs type- and component-wise.
         /// </summary>
@@ -769,7 +769,7 @@ namespace GlmSharp
             if (ReferenceEquals(null, obj)) return false;
             return obj is gvec4<T> && Equals((gvec4<T>) obj);
         }
-        
+
         /// <summary>
         /// Returns a hash code for this instance.
         /// </summary>
@@ -785,42 +785,42 @@ namespace GlmSharp
 
 
         #region Component-Wise Static Functions
-        
+
         /// <summary>
         /// Returns a bvec4 from component-wise application of Equal (EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>
         public static bvec4 Equal(gvec4<T> lhs, gvec4<T> rhs) => new bvec4(EqualityComparer<T>.Default.Equals(lhs.x, rhs.x), EqualityComparer<T>.Default.Equals(lhs.y, rhs.y), EqualityComparer<T>.Default.Equals(lhs.z, rhs.z), EqualityComparer<T>.Default.Equals(lhs.w, rhs.w));
-        
+
         /// <summary>
         /// Returns a bvec4 from component-wise application of Equal (EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>
         public static bvec4 Equal(gvec4<T> lhs, T rhs) => new bvec4(EqualityComparer<T>.Default.Equals(lhs.x, rhs), EqualityComparer<T>.Default.Equals(lhs.y, rhs), EqualityComparer<T>.Default.Equals(lhs.z, rhs), EqualityComparer<T>.Default.Equals(lhs.w, rhs));
-        
+
         /// <summary>
         /// Returns a bvec4 from component-wise application of Equal (EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>
         public static bvec4 Equal(T lhs, gvec4<T> rhs) => new bvec4(EqualityComparer<T>.Default.Equals(lhs, rhs.x), EqualityComparer<T>.Default.Equals(lhs, rhs.y), EqualityComparer<T>.Default.Equals(lhs, rhs.z), EqualityComparer<T>.Default.Equals(lhs, rhs.w));
-        
+
         /// <summary>
         /// Returns a bvec from the application of Equal (EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>
         public static bvec4 Equal(T lhs, T rhs) => new bvec4(EqualityComparer<T>.Default.Equals(lhs, rhs));
-        
+
         /// <summary>
         /// Returns a bvec4 from component-wise application of NotEqual (!EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>
         public static bvec4 NotEqual(gvec4<T> lhs, gvec4<T> rhs) => new bvec4(!EqualityComparer<T>.Default.Equals(lhs.x, rhs.x), !EqualityComparer<T>.Default.Equals(lhs.y, rhs.y), !EqualityComparer<T>.Default.Equals(lhs.z, rhs.z), !EqualityComparer<T>.Default.Equals(lhs.w, rhs.w));
-        
+
         /// <summary>
         /// Returns a bvec4 from component-wise application of NotEqual (!EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>
         public static bvec4 NotEqual(gvec4<T> lhs, T rhs) => new bvec4(!EqualityComparer<T>.Default.Equals(lhs.x, rhs), !EqualityComparer<T>.Default.Equals(lhs.y, rhs), !EqualityComparer<T>.Default.Equals(lhs.z, rhs), !EqualityComparer<T>.Default.Equals(lhs.w, rhs));
-        
+
         /// <summary>
         /// Returns a bvec4 from component-wise application of NotEqual (!EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>
         public static bvec4 NotEqual(T lhs, gvec4<T> rhs) => new bvec4(!EqualityComparer<T>.Default.Equals(lhs, rhs.x), !EqualityComparer<T>.Default.Equals(lhs, rhs.y), !EqualityComparer<T>.Default.Equals(lhs, rhs.z), !EqualityComparer<T>.Default.Equals(lhs, rhs.w));
-        
+
         /// <summary>
         /// Returns a bvec from the application of NotEqual (!EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>

@@ -1,9 +1,0 @@
-{
-    "rust-analyzer.linkedProjects": [
-        "engine/Cargo.toml"
-    ],
-    "rust-analyzer.cargo.extraEnv": {
-        "NEWTOAST_DEP_LIB_PATH": "C:/users/theal/Projects/newtoast/deps/lib"
-    },
-    "dotnet.defaultSolution": "disable"
-}

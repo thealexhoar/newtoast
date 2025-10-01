@@ -37,8 +37,8 @@ namespace GlmSharp
         public static int Clamp(this int v, int min = 0, int max = 1) => v < min ? min : v > max ? max : v;
         public static uint Clamp(this uint v, uint min = 0, uint max = 1) => v < min ? min : v > max ? max : v;
         public static float Clamp(this float v, float min = 0, float max = 1) => v < min ? min : v > max ? max : v;
-        public static Half Clamp(this Half v, Half min, Half max) => v < min ? min : v > max ? max : v;
-        public static Half Clamp(this Half v) => v < Half.Zero ? Half.Zero : v > Half.One ? Half.One : v;
+        public static GlmHalf Clamp(this GlmHalf v, GlmHalf min, GlmHalf max) => v < min ? min : v > max ? max : v;
+        public static GlmHalf Clamp(this GlmHalf v) => v < GlmHalf.Zero ? GlmHalf.Zero : v > GlmHalf.One ? GlmHalf.One : v;
         public static double Clamp(this double v, double min = 0, double max = 1) => v < min ? min : v > max ? max : v;
         public static decimal Clamp(this decimal v, decimal min = 0, decimal max = 1) => v < min ? min : v > max ? max : v;
         public static long Clamp(this long v, long min = 0, long max = 1) => v < min ? min : v > max ? max : v;
@@ -46,7 +46,7 @@ namespace GlmSharp
         public static int HermiteInterpolationOrder3(this int v) => v * v * (3 - 2 * v);
         public static uint HermiteInterpolationOrder3(this uint v) => v * v * (3 - 2 * v);
         public static float HermiteInterpolationOrder3(this float v) => v * v * (3 - 2 * v);
-        public static Half HermiteInterpolationOrder3(this Half v) => v * v * (3 - 2 * v);
+        public static GlmHalf HermiteInterpolationOrder3(this GlmHalf v) => v * v * (3 - 2 * v);
         public static double HermiteInterpolationOrder3(this double v) => v * v * (3 - 2 * v);
         public static decimal HermiteInterpolationOrder3(this decimal v) => v * v * (3 - 2 * v);
         public static long HermiteInterpolationOrder3(this long v) => v * v * (3 - 2 * v);
@@ -54,7 +54,7 @@ namespace GlmSharp
         public static int HermiteInterpolationOrder5(this int v) => v * v * v * (6 * v * v - 15 * v + 10);
         public static uint HermiteInterpolationOrder5(this uint v) => v * v * v * (6 * v * v - 15 * v + 10);
         public static float HermiteInterpolationOrder5(this float v) => v * v * v * (6 * v * v - 15 * v + 10);
-        public static Half HermiteInterpolationOrder5(this Half v) => v * v * v * (6 * v * v - 15 * v + 10);
+        public static GlmHalf HermiteInterpolationOrder5(this GlmHalf v) => v * v * v * (6 * v * v - 15 * v + 10);
         public static double HermiteInterpolationOrder5(this double v) => v * v * v * (6 * v * v - 15 * v + 10);
         public static decimal HermiteInterpolationOrder5(this decimal v) => v * v * v * (6 * v * v - 15 * v + 10);
         public static long HermiteInterpolationOrder5(this long v) => v * v * v * (6 * v * v - 15 * v + 10);
@@ -81,11 +81,11 @@ namespace GlmSharp
 
         private static int PoissonLarge(this double lambda, Random random)
         {
-            // "Rejection method PA" from "The Computer Generation of 
+            // "Rejection method PA" from "The Computer Generation of
             // Poisson Random Variables" by A. C. Atkinson,
-            // Journal of the Royal Statistical Society Series C 
+            // Journal of the Royal Statistical Society Series C
             // (Applied Statistics) Vol. 28, No. 1. (1979)
-            // The article is on pages 29-35. 
+            // The article is on pages 29-35.
             // The algorithm given here is on page 32.
 
             double c = 0.767 - 3.36 / lambda;

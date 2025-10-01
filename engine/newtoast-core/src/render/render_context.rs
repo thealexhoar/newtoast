@@ -1,10 +1,10 @@
 
-use std::ffi::CStr;
+use std::ffi::{CStr, CString};
 
 use glow::{HasContext};
 use sdl3_sys::everything::*;
 
-use crate::render::{gl_get_proc_address, imgui_sdl::ImguiSdl};
+use crate::{render::{gl_get_proc_address, imgui_sdl::ImguiSdl}, runtime_interface::config::InitConfig};
 
 
 #[derive(Clone, Debug)]
@@ -24,10 +24,11 @@ pub struct RenderContext {
 }
 
 impl RenderContext {
-    pub fn new() -> Result<Self, RenderError> {
+    pub fn new(config: &InitConfig) -> Result<Self, RenderError> {
         unsafe {
             //TODO config
-            let title = "NEW TOAST\0";
+            // let title = config.window_title.as_ref();
+            let title = CString::new(config.window_title.as_str()).unwrap();
 
             let load_gl_result = SDL_GL_LoadLibrary(std::ptr::null());
             if false == load_gl_result {

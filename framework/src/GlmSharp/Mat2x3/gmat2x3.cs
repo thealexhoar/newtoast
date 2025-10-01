@@ -12,7 +12,7 @@ using GlmSharp.Swizzle;
 
 namespace GlmSharp
 {
-    
+
     /// <summary>
     /// A matrix of type T with 2 columns and 3 rows.
     /// </summary>
@@ -23,37 +23,37 @@ namespace GlmSharp
     {
 
         #region Fields
-        
+
         /// <summary>
         /// Column 0, Rows 0
         /// </summary>
         [DataMember]
         public T m00;
-        
+
         /// <summary>
         /// Column 0, Rows 1
         /// </summary>
         [DataMember]
         public T m01;
-        
+
         /// <summary>
         /// Column 0, Rows 2
         /// </summary>
         [DataMember]
         public T m02;
-        
+
         /// <summary>
         /// Column 1, Rows 0
         /// </summary>
         [DataMember]
         public T m10;
-        
+
         /// <summary>
         /// Column 1, Rows 1
         /// </summary>
         [DataMember]
         public T m11;
-        
+
         /// <summary>
         /// Column 1, Rows 2
         /// </summary>
@@ -64,7 +64,7 @@ namespace GlmSharp
 
 
         #region Constructors
-        
+
         /// <summary>
         /// Component-wise constructor
         /// </summary>
@@ -77,7 +77,7 @@ namespace GlmSharp
             this.m11 = m11;
             this.m12 = m12;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a gmat2. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -85,12 +85,12 @@ namespace GlmSharp
         {
             this.m00 = m.m00;
             this.m01 = m.m01;
-            this.m02 = default(T);
+            this.m02 = default!;
             this.m10 = m.m10;
             this.m11 = m.m11;
-            this.m12 = default(T);
+            this.m12 = default!;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a gmat3x2. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -98,12 +98,12 @@ namespace GlmSharp
         {
             this.m00 = m.m00;
             this.m01 = m.m01;
-            this.m02 = default(T);
+            this.m02 = default!;
             this.m10 = m.m10;
             this.m11 = m.m11;
-            this.m12 = default(T);
+            this.m12 = default!;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a gmat4x2. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -111,12 +111,12 @@ namespace GlmSharp
         {
             this.m00 = m.m00;
             this.m01 = m.m01;
-            this.m02 = default(T);
+            this.m02 = default!;
             this.m10 = m.m10;
             this.m11 = m.m11;
-            this.m12 = default(T);
+            this.m12 = default!;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a gmat2x3. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -129,7 +129,7 @@ namespace GlmSharp
             this.m11 = m.m11;
             this.m12 = m.m12;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a gmat3. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -142,7 +142,7 @@ namespace GlmSharp
             this.m11 = m.m11;
             this.m12 = m.m12;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a gmat4x3. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -155,7 +155,7 @@ namespace GlmSharp
             this.m11 = m.m11;
             this.m12 = m.m12;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a gmat2x4. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -168,7 +168,7 @@ namespace GlmSharp
             this.m11 = m.m11;
             this.m12 = m.m12;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a gmat3x4. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -181,7 +181,7 @@ namespace GlmSharp
             this.m11 = m.m11;
             this.m12 = m.m12;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a gmat4. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -194,7 +194,7 @@ namespace GlmSharp
             this.m11 = m.m11;
             this.m12 = m.m12;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a series of column vectors. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -202,12 +202,12 @@ namespace GlmSharp
         {
             this.m00 = c0.x;
             this.m01 = c0.y;
-            this.m02 = default(T);
+            this.m02 = default!;
             this.m10 = c1.x;
             this.m11 = c1.y;
-            this.m12 = default(T);
+            this.m12 = default!;
         }
-        
+
         /// <summary>
         /// Constructs this matrix from a series of column vectors. Non-overwritten fields are from an Identity matrix.
         /// </summary>
@@ -225,17 +225,17 @@ namespace GlmSharp
 
 
         #region Properties
-        
+
         /// <summary>
         /// Creates a 2D array with all values (address: Values[x, y])
         /// </summary>
         public T[,] Values => new[,] { { m00, m01, m02 }, { m10, m11, m12 } };
-        
+
         /// <summary>
         /// Creates a 1D array with all values (internal order)
         /// </summary>
         public T[] Values1D => new[] { m00, m01, m02, m10, m11, m12 };
-        
+
         /// <summary>
         /// Gets or sets the column nr 0
         /// </summary>
@@ -252,7 +252,7 @@ namespace GlmSharp
                 m02 = value.z;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the column nr 1
         /// </summary>
@@ -269,7 +269,7 @@ namespace GlmSharp
                 m12 = value.z;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the row nr 0
         /// </summary>
@@ -285,7 +285,7 @@ namespace GlmSharp
                 m10 = value.y;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the row nr 1
         /// </summary>
@@ -301,7 +301,7 @@ namespace GlmSharp
                 m11 = value.y;
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the row nr 2
         /// </summary>
@@ -322,17 +322,17 @@ namespace GlmSharp
 
 
         #region Static Properties
-        
+
         /// <summary>
         /// Predefined all-zero matrix
         /// </summary>
-        public static gmat2x3<T> Zero { get; } = new gmat2x3<T>(default(T), default(T), default(T), default(T), default(T), default(T));
+        public static gmat2x3<T> Zero { get; } = new gmat2x3<T>(default!, default!, default!, default!, default!, default!);
 
         #endregion
 
 
         #region Functions
-        
+
         /// <summary>
         /// Returns an enumerator that iterates through all fields.
         /// </summary>
@@ -345,7 +345,7 @@ namespace GlmSharp
             yield return m11;
             yield return m12;
         }
-        
+
         /// <summary>
         /// Returns an enumerator that iterates through all fields.
         /// </summary>
@@ -353,12 +353,12 @@ namespace GlmSharp
 
         #endregion
 
-        
+
         /// <summary>
         /// Returns the number of Fields (2 x 3 = 6).
         /// </summary>
         public int Count => 6;
-        
+
         /// <summary>
         /// Gets/Sets a specific indexed component (a bit slower than direct access).
         /// </summary>
@@ -391,7 +391,7 @@ namespace GlmSharp
                 }
             }
         }
-        
+
         /// <summary>
         /// Gets/Sets a specific 2D-indexed component (a bit slower than direct access).
         /// </summary>
@@ -406,12 +406,12 @@ namespace GlmSharp
                 this[col * 3 + row] = value;
             }
         }
-        
+
         /// <summary>
         /// Returns true iff this equals rhs component-wise.
         /// </summary>
         public bool Equals(gmat2x3<T> rhs) => (((EqualityComparer<T>.Default.Equals(m00, rhs.m00) && EqualityComparer<T>.Default.Equals(m01, rhs.m01)) && EqualityComparer<T>.Default.Equals(m02, rhs.m02)) && ((EqualityComparer<T>.Default.Equals(m10, rhs.m10) && EqualityComparer<T>.Default.Equals(m11, rhs.m11)) && EqualityComparer<T>.Default.Equals(m12, rhs.m12)));
-        
+
         /// <summary>
         /// Returns true iff this equals rhs type- and component-wise.
         /// </summary>
@@ -420,17 +420,17 @@ namespace GlmSharp
             if (ReferenceEquals(null, obj)) return false;
             return obj is gmat2x3<T> && Equals((gmat2x3<T>) obj);
         }
-        
+
         /// <summary>
         /// Returns true iff this equals rhs component-wise.
         /// </summary>
         public static bool operator ==(gmat2x3<T> lhs, gmat2x3<T> rhs) => lhs.Equals(rhs);
-        
+
         /// <summary>
         /// Returns true iff this does not equal rhs (component-wise).
         /// </summary>
         public static bool operator !=(gmat2x3<T> lhs, gmat2x3<T> rhs) => !lhs.Equals(rhs);
-        
+
         /// <summary>
         /// Returns a hash code for this instance.
         /// </summary>
@@ -438,10 +438,10 @@ namespace GlmSharp
         {
             unchecked
             {
-                return ((((((((((EqualityComparer<T>.Default.GetHashCode(m00)) * 397) ^ EqualityComparer<T>.Default.GetHashCode(m01)) * 397) ^ EqualityComparer<T>.Default.GetHashCode(m02)) * 397) ^ EqualityComparer<T>.Default.GetHashCode(m10)) * 397) ^ EqualityComparer<T>.Default.GetHashCode(m11)) * 397) ^ EqualityComparer<T>.Default.GetHashCode(m12);
+                return ((((((((((EqualityComparer<T>.Default.GetHashCode(m00!)) * 397) ^ EqualityComparer<T>.Default.GetHashCode(m01!)) * 397) ^ EqualityComparer<T>.Default.GetHashCode(m02!)) * 397) ^ EqualityComparer<T>.Default.GetHashCode(m10!)) * 397) ^ EqualityComparer<T>.Default.GetHashCode(m11!)) * 397) ^ EqualityComparer<T>.Default.GetHashCode(m12!);
             }
         }
-        
+
         /// <summary>
         /// Returns a transposed version of this matrix.
         /// </summary>

@@ -1,7 +1,7 @@
 use std::{ffi::{CStr, CString}};
 use sdl3_sys::{error::SDL_GetError, events::{SDL_EventType, SDL_EVENT_QUIT}, init::{SDL_Init, SDL_INIT_VIDEO}};
 
-use crate::{dotnet::{self, DotnetContext}, render::RenderContext, runtime_interface::entrypoint::RuntimeEntrypoints, util::timing::InterpolatingTimer};
+use crate::{dotnet::{self, DotnetContext}, render::{RenderContext, RenderServer}, runtime_interface::entrypoint::RuntimeEntrypoints, util::timing::InterpolatingTimer};
 
 
 fn setup_dotnet_runtime(dotnet: &mut DotnetContext) -> Result<RuntimeEntrypoints, &'static str> {
@@ -33,8 +33,7 @@ fn core_loop(runtime_interface: &RuntimeEntrypoints) {
         // but once it's chugging along I can start to make kinder interfaces
 
         // Initialize runtime here to pick up any config changes
-        let foo: u8 = 21;
-        runtime_interface.initialize(&foo);
+        let init_config = runtime_interface.setup_and_get_config();
 
         let initflags = SDL_INIT_VIDEO;
         let init_result = SDL_Init(initflags);
@@ -43,9 +42,13 @@ fn core_loop(runtime_interface: &RuntimeEntrypoints) {
             println!("SDL_Init failed: {}", &sdl_err);
         }
 
-        let mut render_context = RenderContext::new().expect("RenderContext::new failed");
+        let mut render_context = RenderContext::new(&init_config).expect("RenderContext::new failed");
+        let mut render_server = RenderServer::new();
+
 
         // TODO initialize subsystems
+
+        runtime_interface.initialize();
 
         let mut tick_events = Vec::new();
         let mut should_exit = false;
@@ -67,6 +70,7 @@ fn core_loop(runtime_interface: &RuntimeEntrypoints) {
             }
             tick_events.clear();
 
+            runtime_interface.bind_render_server(&mut render_server);
             // TODO revisit the idea of passing dt like this at all
             for _ in 0..updates {
                 runtime_interface.update(1.0 / 60.0);
@@ -74,6 +78,7 @@ fn core_loop(runtime_interface: &RuntimeEntrypoints) {
 
             // TODO figure out how to properly use dt
             runtime_interface.draw();
+            runtime_interface.unbind_render_server();
 
             render_context.imgui_frame(|ui| {
                 ui.show_demo_window(&mut true);
@@ -81,7 +86,7 @@ fn core_loop(runtime_interface: &RuntimeEntrypoints) {
 
             render_context.render_frame();
 
-            if should_exit || true {
+            if should_exit {
                 runtime_interface.shutdown();
                 break 'gameloop;
             }

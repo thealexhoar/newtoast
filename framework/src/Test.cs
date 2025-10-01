@@ -1,34 +1,42 @@
 using NTF;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading;
+using GlmSharp;
 
 
 [assembly:NTEntrypointSpecifier("NTF.Test")]
 
-namespace NTF
+namespace NTF;
+
+public class Test : NTEntrypoint
 {
-    public class Test : NTEntrypoint
+    public override InitConfig GetConfig()
     {
-        public void Initialize()
-        {
-            Console.WriteLine("Hello from Test.Load!");
-        }
+        return new InitConfigBuilder()
+            .WithTitle("NewToast Game!")
+            .WithSize(960, 720)
+            .WithVSync(true)
+            .WithWindowed(true)
+            .Build();
+    }
 
-        public void Shutdown()
-        {
-            Console.WriteLine("Hello from Test.Unload!");
-        }
+    public override void Initialize()
+    {
+        vec2 a = new vec2(1, 2);
+        Console.WriteLine($"Hello from Test.Load! {a}");
+    }
 
-        public void Update(double dt)
-        {
-            Console.WriteLine("Hello from Test.Update!");
-        }
+    public override void Shutdown()
+    {
+        Console.WriteLine("Hello from Test.Unload!");
+    }
 
-        public void Draw()
-        {
-            Console.WriteLine("Hello from Test.Draw!");
-        }
+    public override  void Update(double dt)
+    {
+        // Console.WriteLine("Hello from Test.Update!");
+    }
+
+    public override void Draw()
+    {
+        // Console.WriteLine("Hello from Test.Draw!");
     }
 }

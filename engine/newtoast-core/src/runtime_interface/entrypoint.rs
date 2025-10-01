@@ -2,7 +2,7 @@ use std::{ffi::{CStr, CString, OsString}, mem::transmute, os::raw::{c_char, c_vo
 
 use widestring::U16CString;
 
-use crate::{dotnet::{DotnetContext, DotnetFunction, DotnetFunctionPtr}, render::RenderServer, runtime_interface::config::RawInitConfig, util::parse_hstr_wide};
+use crate::{dotnet::{DotnetContext, DotnetFunction, DotnetFunctionPtr}, render::RenderServer, runtime_interface::config::{InitConfig, RawInitConfig}, util::parse_hstr_wide};
 
 
 #[repr(C)]
@@ -22,19 +22,24 @@ impl EntrypointSpecifier {
     }
 }
 
+type GetConfigFn = fn() -> RawInitConfig;
 type InitializeFn = fn();
 type ShutdownFn = fn();
 type UpdateFn = fn(f64);
 type DrawFn = fn();
+type FreeHstrFn = fn(*const i16);
 
 type BindSingletonFn = fn(*const c_void) -> ();
 type UnbindSingletonFn = fn() -> ();
 
 pub struct RuntimeEntrypoints {
+    get_config_fptr: DotnetFunctionPtr,
     initialize_fptr: DotnetFunctionPtr,
     shutdown_fptr: DotnetFunctionPtr,
     update_fptr: DotnetFunctionPtr,
     draw_fptr: DotnetFunctionPtr,
+
+    free_hstr_fptr: DotnetFunctionPtr,
 
     bind_render_server: DotnetFunctionPtr,
     unbind_render_server: DotnetFunctionPtr,
@@ -46,6 +51,10 @@ impl RuntimeEntrypoints {
     ) -> Result<Self, &'static str> {
         let internal_entrypoint_class = "NTF.NTEntrypointInternal, NT";
 
+        let get_config_fptr: DotnetFunctionPtr = dotnet.get_fn_pointer(
+            internal_entrypoint_class,
+            "SetupAndGetConfig",
+            "NTF.GetConfigFn, NT");
         let initialize_fptr: DotnetFunctionPtr = dotnet.get_fn_pointer(
             internal_entrypoint_class,
             "Initialize",
@@ -62,6 +71,12 @@ impl RuntimeEntrypoints {
             internal_entrypoint_class,
             "Draw",
             "NTF.DrawFn, NT");
+
+        let free_hstr_fptr = dotnet.get_fn_pointer(
+            internal_entrypoint_class,
+            "FreeHstr",
+            "NTF.FreeHstrFn, NT");
+
         let bind_render_server = dotnet.get_fn_pointer(
             internal_entrypoint_class,
             "BindRenderServer",
@@ -72,17 +87,28 @@ impl RuntimeEntrypoints {
             "NTF.UnbindRenderServerFn, NT");
 
         Ok(Self {
+            get_config_fptr,
             initialize_fptr,
             shutdown_fptr,
             update_fptr,
             draw_fptr,
+            free_hstr_fptr,
             bind_render_server,
             unbind_render_server,
         })
     }
 
 
-    pub fn initialize<'a>(&self, foo: &u8) {
+    pub fn setup_and_get_config(&self) -> InitConfig {
+        unsafe {
+            let config_raw = self.get_config_fptr.call::<GetConfigFn>(());
+            config_raw.cook(|ptr| {
+                self.free_hstr_fptr.call::<FreeHstrFn>((ptr));
+            })
+        }
+    }
+
+    pub fn initialize<'a>(&self) {
         unsafe {
             self.initialize_fptr.call::<InitializeFn>(())
         }

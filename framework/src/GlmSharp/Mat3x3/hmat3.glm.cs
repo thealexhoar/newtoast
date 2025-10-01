@@ -17,26 +17,26 @@ namespace GlmSharp
     /// </summary>
     public static partial class glm
     {
-        
+
         /// <summary>
         /// Creates a 2D array with all values (address: Values[x, y])
         /// </summary>
-        public static Half[,] Values(hmat3 m) => m.Values;
-        
+        public static GlmHalf[,] Values(hmat3 m) => m.Values;
+
         /// <summary>
         /// Creates a 1D array with all values (internal order)
         /// </summary>
-        public static Half[] Values1D(hmat3 m) => m.Values1D;
-        
+        public static GlmHalf[] Values1D(hmat3 m) => m.Values1D;
+
         /// <summary>
         /// Creates a quaternion from the rotational part of this matrix.
         /// </summary>
         public static hquat ToQuaternion(hmat3 m) => m.ToQuaternion;
-        
+
         /// <summary>
         /// Returns an enumerator that iterates through all fields.
         /// </summary>
-        public static IEnumerator<Half> GetEnumerator(hmat3 m) => m.GetEnumerator();
+        public static IEnumerator<GlmHalf> GetEnumerator(hmat3 m) => m.GetEnumerator();
 
     }
 }

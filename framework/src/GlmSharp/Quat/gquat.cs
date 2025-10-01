@@ -12,7 +12,7 @@ using GlmSharp.Swizzle;
 
 namespace GlmSharp
 {
-    
+
     /// <summary>
     /// A quaternion of type T.
     /// </summary>
@@ -23,25 +23,25 @@ namespace GlmSharp
     {
 
         #region Fields
-        
+
         /// <summary>
         /// x-component
         /// </summary>
         [DataMember]
         public T x;
-        
+
         /// <summary>
         /// y-component
         /// </summary>
         [DataMember]
         public T y;
-        
+
         /// <summary>
         /// z-component
         /// </summary>
         [DataMember]
         public T z;
-        
+
         /// <summary>
         /// w-component
         /// </summary>
@@ -52,7 +52,7 @@ namespace GlmSharp
 
 
         #region Constructors
-        
+
         /// <summary>
         /// Component-wise constructor
         /// </summary>
@@ -63,7 +63,7 @@ namespace GlmSharp
             this.z = z;
             this.w = w;
         }
-        
+
         /// <summary>
         /// all-same-value constructor
         /// </summary>
@@ -74,7 +74,7 @@ namespace GlmSharp
             this.z = v;
             this.w = v;
         }
-        
+
         /// <summary>
         /// copy constructor
         /// </summary>
@@ -85,7 +85,7 @@ namespace GlmSharp
             this.z = q.z;
             this.w = q.w;
         }
-        
+
         /// <summary>
         /// vector-and-scalar constructor (CAUTION: not angle-axis, use FromAngleAxis instead)
         /// </summary>
@@ -101,7 +101,7 @@ namespace GlmSharp
 
 
         #region Explicit Operators
-        
+
         /// <summary>
         /// Explicitly converts this to a gvec4.
         /// </summary>
@@ -111,7 +111,7 @@ namespace GlmSharp
 
 
         #region Indexer
-        
+
         /// <summary>
         /// Gets/Sets a specific indexed component (a bit slower than direct access).
         /// </summary>
@@ -145,12 +145,12 @@ namespace GlmSharp
 
 
         #region Properties
-        
+
         /// <summary>
         /// Returns an array with all values
         /// </summary>
         public T[] Values => new[] { x, y, z, w };
-        
+
         /// <summary>
         /// Returns the number of components (4).
         /// </summary>
@@ -160,22 +160,22 @@ namespace GlmSharp
 
 
         #region Static Properties
-        
+
         /// <summary>
         /// Predefined all-zero quaternion
         /// </summary>
-        public static gquat<T> Zero { get; } = new gquat<T>(default(T), default(T), default(T), default(T));
+        public static gquat<T> Zero { get; } = new gquat<T>(default!, default!, default!, default!);
 
         #endregion
 
 
         #region Operators
-        
+
         /// <summary>
         /// Returns true iff this equals rhs component-wise.
         /// </summary>
         public static bool operator==(gquat<T> lhs, gquat<T> rhs) => lhs.Equals(rhs);
-        
+
         /// <summary>
         /// Returns true iff this does not equal rhs (component-wise).
         /// </summary>
@@ -185,7 +185,7 @@ namespace GlmSharp
 
 
         #region Functions
-        
+
         /// <summary>
         /// Returns an enumerator that iterates through all components.
         /// </summary>
@@ -196,27 +196,27 @@ namespace GlmSharp
             yield return z;
             yield return w;
         }
-        
+
         /// <summary>
         /// Returns an enumerator that iterates through all components.
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        
+
         /// <summary>
         /// Returns a string representation of this quaternion using ', ' as a seperator.
         /// </summary>
         public override string ToString() => ToString(", ");
-        
+
         /// <summary>
         /// Returns a string representation of this quaternion using a provided seperator.
         /// </summary>
         public string ToString(string sep) => ((x + sep + y) + sep + (z + sep + w));
-        
+
         /// <summary>
         /// Returns true iff this equals rhs component-wise.
         /// </summary>
         public bool Equals(gquat<T> rhs) => ((EqualityComparer<T>.Default.Equals(x, rhs.x) && EqualityComparer<T>.Default.Equals(y, rhs.y)) && (EqualityComparer<T>.Default.Equals(z, rhs.z) && EqualityComparer<T>.Default.Equals(w, rhs.w)));
-        
+
         /// <summary>
         /// Returns true iff this equals rhs type- and component-wise.
         /// </summary>
@@ -225,7 +225,7 @@ namespace GlmSharp
             if (ReferenceEquals(null, obj)) return false;
             return obj is gquat<T> && Equals((gquat<T>) obj);
         }
-        
+
         /// <summary>
         /// Returns a hash code for this instance.
         /// </summary>
@@ -241,42 +241,42 @@ namespace GlmSharp
 
 
         #region Component-Wise Static Functions
-        
+
         /// <summary>
         /// Returns a bvec4 from component-wise application of Equal (EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>
         public static bvec4 Equal(gquat<T> lhs, gquat<T> rhs) => new bvec4(EqualityComparer<T>.Default.Equals(lhs.x, rhs.x), EqualityComparer<T>.Default.Equals(lhs.y, rhs.y), EqualityComparer<T>.Default.Equals(lhs.z, rhs.z), EqualityComparer<T>.Default.Equals(lhs.w, rhs.w));
-        
+
         /// <summary>
         /// Returns a bvec4 from component-wise application of Equal (EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>
         public static bvec4 Equal(gquat<T> lhs, T rhs) => new bvec4(EqualityComparer<T>.Default.Equals(lhs.x, rhs), EqualityComparer<T>.Default.Equals(lhs.y, rhs), EqualityComparer<T>.Default.Equals(lhs.z, rhs), EqualityComparer<T>.Default.Equals(lhs.w, rhs));
-        
+
         /// <summary>
         /// Returns a bvec4 from component-wise application of Equal (EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>
         public static bvec4 Equal(T lhs, gquat<T> rhs) => new bvec4(EqualityComparer<T>.Default.Equals(lhs, rhs.x), EqualityComparer<T>.Default.Equals(lhs, rhs.y), EqualityComparer<T>.Default.Equals(lhs, rhs.z), EqualityComparer<T>.Default.Equals(lhs, rhs.w));
-        
+
         /// <summary>
         /// Returns a bvec from the application of Equal (EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>
         public static bvec4 Equal(T lhs, T rhs) => new bvec4(EqualityComparer<T>.Default.Equals(lhs, rhs));
-        
+
         /// <summary>
         /// Returns a bvec4 from component-wise application of NotEqual (!EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>
         public static bvec4 NotEqual(gquat<T> lhs, gquat<T> rhs) => new bvec4(!EqualityComparer<T>.Default.Equals(lhs.x, rhs.x), !EqualityComparer<T>.Default.Equals(lhs.y, rhs.y), !EqualityComparer<T>.Default.Equals(lhs.z, rhs.z), !EqualityComparer<T>.Default.Equals(lhs.w, rhs.w));
-        
+
         /// <summary>
         /// Returns a bvec4 from component-wise application of NotEqual (!EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>
         public static bvec4 NotEqual(gquat<T> lhs, T rhs) => new bvec4(!EqualityComparer<T>.Default.Equals(lhs.x, rhs), !EqualityComparer<T>.Default.Equals(lhs.y, rhs), !EqualityComparer<T>.Default.Equals(lhs.z, rhs), !EqualityComparer<T>.Default.Equals(lhs.w, rhs));
-        
+
         /// <summary>
         /// Returns a bvec4 from component-wise application of NotEqual (!EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>
         public static bvec4 NotEqual(T lhs, gquat<T> rhs) => new bvec4(!EqualityComparer<T>.Default.Equals(lhs, rhs.x), !EqualityComparer<T>.Default.Equals(lhs, rhs.y), !EqualityComparer<T>.Default.Equals(lhs, rhs.z), !EqualityComparer<T>.Default.Equals(lhs, rhs.w));
-        
+
         /// <summary>
         /// Returns a bvec from the application of NotEqual (!EqualityComparer&lt;T&gt;.Default.Equals(lhs, rhs)).
         /// </summary>

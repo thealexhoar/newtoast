@@ -10,27 +10,37 @@ pub struct RawInitConfig {
     pub windowed: bool,
 }
 
+impl RawInitConfig {
+    pub fn cook<F>(self, free_hstr: F) -> InitConfig
+        where F: Fn(*const i16) -> ()
+    {
+        unsafe {
+            let window_title = if self.window_title.is_null() {
+                "NT".into()
+            } else {
+                let out = U16CString::from_ptr_str(self.window_title as *const u16)
+                    .to_string_lossy();
+                free_hstr(self.window_title);
+                out
+            };
+
+            InitConfig {
+                window_title,
+                window_width: self.window_width,
+                window_height: self.window_height,
+                vsync: self.vsync,
+                windowed: self.windowed,
+            }
+        }
+    }
+}
+
 pub struct InitConfig {
     pub window_title: String,
     pub window_width: i32,
     pub window_height: i32,
     pub vsync: bool,
     pub windowed: bool,
-}
-
-impl From<RawInitConfig> for InitConfig {
-    fn from(raw: RawInitConfig) -> Self {
-        unsafe {
-            InitConfig {
-                window_title: U16CString::from_ptr_str(raw.window_title as *const u16)
-                    .to_string_lossy(),
-                window_width: raw.window_width,
-                window_height: raw.window_height,
-                vsync: raw.vsync,
-                windowed: raw.windowed,
-            }
-        }
-    }
 }
 
 #[derive(Debug, Default)]

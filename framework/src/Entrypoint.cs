@@ -6,165 +6,151 @@ using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace NTF
+namespace NTF;
+public delegate InitConfig GetConfigFn();
+public delegate void InitializeFn();
+public delegate void ShutdownFn();
+public delegate void UpdateFn(double dt);
+public delegate void DrawFn();
+
+public delegate void BindRenderServerFn(nint renderServer);
+public delegate void UnbindRenderServerFn();
+public delegate void FreeHstrFn(nint hstr);
+
+
+[StructLayout(LayoutKind.Sequential)]
+public struct NTEntrypointSpecifier
 {
-    public delegate NTEntrypointSpecifier FindEntrypointFn();
-    public delegate void FreeHstrFn(nint hstr);
-    public delegate void InitializeFn(RuntimeSingletons singletons);
-    public delegate void ShutdownFn();
-    public delegate void UpdateFn(double dt);
-    public delegate void DrawFn();
+    public nint AssemblyName;
+    public nint ClassName;
+    public bool IsSet;
+}
 
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct NTEntrypointSpecifier
+// public static class NTEntryPoint
+// {
+//     public static void Load() {}
+
+//     public static void Unload() { }
+
+//     public static void Update(double dt) {}
+
+//     public static void Draw() {}
+// }
+
+
+[AttributeUsage(AttributeTargets.Assembly)]
+public class NTEntrypointSpecifierAttribute : Attribute
+{
+    public readonly string ClassName;
+    public readonly string AssemblyName;
+
+    public NTEntrypointSpecifierAttribute(string className)
     {
-        public nint AssemblyName;
-        public nint ClassName;
-        public bool IsSet;
+        ClassName = className;
+        AssemblyName = (string)GetType().Assembly.GetName().Name;
+    }
+}
+
+public static class NTEntrypointInternal
+{
+    static NTEntrypoint? entrypointInstance;
+
+    static InitConfig SetupAndGetConfig()
+    {
+        entrypointInstance = ConstructEntrypointInstance();
+        if (entrypointInstance == null)
+        {
+            throw new InvalidOperationException("Entrypoint instance is not constructed");
+        }
+        return entrypointInstance.GetConfig();
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct InitConfig
+    static void Initialize()
     {
-        public nint WindowTitle;
-        public int WindowWidth;
-        public int WindowHeight;
-        public bool VSync;
-        public bool Windowed;
+
+        if (entrypointInstance == null)
+        {
+            throw new Exception("Failed to construct entrypoint instance");
+        }
+        entrypointInstance.Initialize();
     }
 
-    // public static class NTEntryPoint
-    // {
-    //     public static void Load() {}
-
-    //     public static void Unload() { }
-
-    //     public static void Update(double dt) {}
-
-    //     public static void Draw() {}
-    // }
-
-
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class NTEntrypointSpecifierAttribute : Attribute
+    static void Shutdown()
     {
-        public readonly string ClassName;
-        public readonly string AssemblyName;
+        entrypointInstance?.Shutdown();
+    }
 
-        public NTEntrypointSpecifierAttribute(string className)
+    static void Update(double dt)
+    {
+        entrypointInstance?.Update(dt);
+    }
+
+    static void Draw()
+    {
+        entrypointInstance?.Draw();
+    }
+
+    static void BindRenderServer(nint renderServer)
+    {
+        // TODO
+    }
+
+    static void UnbindRenderServer()
+    {
+        // TODO
+    }
+
+    public static void FreeHstr(nint hstr)
+    {
+        if (hstr != nint.Zero)
         {
-            ClassName = className;
-            AssemblyName = (string)GetType().Assembly.GetName().Name;
+            Console.WriteLine($"C#: Freeing hstr {hstr}");
+            Marshal.FreeHGlobal(hstr);
         }
     }
 
-    public static class NTEntrypointInternal
+    static (string, string)? IdentifyEntrypoint()
     {
-        static NTEntrypoint? entrypointInstance;
-
-        static void Initialize(RuntimeSingletons singletons)
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+        foreach (var asm in assemblies)
         {
-            RuntimeSingletons.instance = singletons;
-
-            Lib.TestModifyRef(singletons.Foo);
-
-            entrypointInstance = ConstructEntrypointInstance();
-            if (entrypointInstance == null) {
-                throw new Exception("Failed to construct entrypoint instance");
-            }
-            entrypointInstance.Initialize();
-        }
-
-        static void Shutdown()
-        {
-            entrypointInstance?.Shutdown();
-        }
-
-        static void Update(double dt)
-        {
-            entrypointInstance?.Update(dt);
-        }
-
-        static void Draw()
-        {
-            entrypointInstance?.Draw();
-        }
-
-        static void BindRenderServer(nint renderServer)
-        {
-            // TODO
-        }
-
-        static void UnbindRenderServer()
-        {
-            // TODO
-        }
-
-        public static void FreeHstr(nint hstr)
-        {
-            if (hstr != nint.Zero)
+            var allAttrs = asm.GetCustomAttributes(typeof(NTEntrypointSpecifierAttribute), false);
+            var attrs = (NTEntrypointSpecifierAttribute[])allAttrs;
+            if (attrs.Length > 0)
             {
-                Console.WriteLine($"C#: Freeing hstr {hstr}");
-                Marshal.FreeHGlobal(hstr);
+                // Console.WriteLine($"Writing Types in assembly \"{asm.FullName}\":");
+                // foreach (var type in asm.GetTypes())
+                // {
+                //     Console.WriteLine($"  {type.FullName}");
+                // }
+                return (attrs[0].AssemblyName, attrs[0].ClassName);
             }
         }
 
-        static NTEntrypointSpecifier IdentifyEntrypointForEngine()
-        {
-            var entrypoint = new NTEntrypointSpecifier {
-                IsSet = false
-            };
-            var maybeEntrypoint = IdentifyEntrypoint();
-            if (maybeEntrypoint.HasValue)
-            {
-                var (assemblyName, className) = maybeEntrypoint.Value;
-                entrypoint.AssemblyName = Marshal.StringToHGlobalAnsi(assemblyName);
-                entrypoint.ClassName = Marshal.StringToHGlobalAnsi(className);
-                entrypoint.IsSet = true;
-            }
-            return entrypoint;
-        }
 
-
-        static (string, string)? IdentifyEntrypoint()
-        {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (var asm in assemblies)
-            {
-                var allAttrs = asm.GetCustomAttributes(typeof(NTEntrypointSpecifierAttribute), false);
-                var attrs = (NTEntrypointSpecifierAttribute[])allAttrs;
-                if (attrs.Length > 0)
-                {
-                    // Console.WriteLine($"Writing Types in assembly \"{asm.FullName}\":");
-                    // foreach (var type in asm.GetTypes())
-                    // {
-                    //     Console.WriteLine($"  {type.FullName}");
-                    // }
-                    return (attrs[0].AssemblyName, attrs[0].ClassName);
-                }
-            }
-
-
-            return null;
-        }
-
-        static NTEntrypoint? ConstructEntrypointInstance() {
-            var maybeEntrypoint = IdentifyEntrypoint();
-            if (maybeEntrypoint.HasValue)
-            {
-                var (assemblyName, className) = maybeEntrypoint.Value;
-                return Activator.CreateInstance(assemblyName, className)?.Unwrap() as NTEntrypoint;
-            }
-            return null;
-        }
+        return null;
     }
 
-    public interface NTEntrypoint
+    static NTEntrypoint? ConstructEntrypointInstance() {
+        var maybeEntrypoint = IdentifyEntrypoint();
+        if (maybeEntrypoint.HasValue)
+        {
+            var (assemblyName, className) = maybeEntrypoint.Value;
+            return Activator.CreateInstance(assemblyName, className)?.Unwrap() as NTEntrypoint;
+        }
+        return null;
+    }
+}
+
+public abstract class NTEntrypoint
+{
+    public virtual InitConfig GetConfig()
     {
-        void Initialize();
-        void Shutdown();
-        void Update(double dt);
-        void Draw();
+        return new InitConfigBuilder().Build();
     }
+    public virtual void Initialize() {}
+    public virtual void Shutdown() {}
+    public virtual void Update(double dt) {}
+    public virtual void Draw() {}
 }
